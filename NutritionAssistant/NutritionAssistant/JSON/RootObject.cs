@@ -36,8 +36,17 @@ namespace NutritionAssistant.JSON
                 sb.Append("\n");
             }
 
-
             return sb.ToString();
+        }
+
+        public List<Food> GetFoods()
+        {
+            List<Food> foods = new List<Food>();
+
+            for(int i = 0; i < hits.Count; i++)
+                foods.Add(hits[i].fields);
+
+            return foods;
         }
     }
 }

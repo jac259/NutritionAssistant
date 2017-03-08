@@ -29,8 +29,13 @@ namespace NutritionAssistant
         public UserForm(MainForm _calledBy)
         {
             calledBy = _calledBy;
-            this.StartPosition = FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterScreen;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
+
             InitializeComponent();
+
             SetupControls();
         }
 
@@ -201,7 +206,7 @@ namespace NutritionAssistant
                         if (!DataValidation())
                             return;
                         SaveChanges();
-                        calledBy.SetCurrentUser(((User)cboUsers.SelectedItem));
+                        calledBy.ChangeUser(((User)cboUsers.SelectedItem));
                         SetLoggedIn((User)cboUsers.SelectedItem);
                         break;
                     case DialogResult.Cancel:
@@ -212,7 +217,7 @@ namespace NutritionAssistant
             }
             else
             {
-                calledBy.SetCurrentUser(((User)cboUsers.SelectedItem));
+                calledBy.ChangeUser(((User)cboUsers.SelectedItem));
                 SetLoggedIn((User)cboUsers.SelectedItem);
             }
             this.Close();
