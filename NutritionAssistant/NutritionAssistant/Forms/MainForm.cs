@@ -20,7 +20,7 @@ namespace NutritionAssistant
 {
     public partial class MainForm : Form
     {
-        User currentUser;
+        public User currentUser;
 
         public MainForm()
         {
@@ -36,8 +36,9 @@ namespace NutritionAssistant
 
         public void GetCurrentUser()
         {
-            string fp = UserForm.GetFilepath();
-            List<User> users = UserForm.ReadJSON(fp);
+            //string fp = UserForm.GetFilepath();
+            //List<User> users = UserForm.ReadJSON(fp);
+            List<User> users = GetAllUsers();
             User user = UserForm.GetLoggedIn(users);
             SetCurrentUser(user);
         }
@@ -68,6 +69,36 @@ namespace NutritionAssistant
         public void SetCalories()
         {
             lblCalories.Text = "Calories consumed: " + currentUser.eaten_cal.ToString() + "  (Max: " + currentUser.daily_cal.ToString() + ")";
+        }
+
+        public List<User> GetAllUsers()
+        {
+            return UserForm.ReadJSON(UserForm.GetFilepath());
+        }
+
+        public void ResetUsers()
+        {
+            List<User> users = GetAllUsers();
+
+            for (int i = 0; i < users.Count; i++)
+            {
+                User tempUser = users[i];
+                tempUser.eaten_cal = 0;
+
+                if (tempUser.food_eaten == null)
+                    tempUser.food_eaten = new List<Food>();
+
+                tempUser.food_eaten.Clear();
+                
+                if (tempUser.id == currentUser.id)
+                    currentUser = tempUser;
+
+                users[i] = tempUser;
+            }
+
+            UserForm.WriteJSON(users, UserForm.GetFilepath());
+
+            SetCalories();
         }
 
         private async void btnQuery_Click(object sender, System.EventArgs e)
@@ -104,6 +135,11 @@ namespace NutritionAssistant
         {
             if (e.KeyChar == (char)Keys.Enter || e.KeyChar == (char)Keys.Return)
                 btnQuery_Click(sender, new EventArgs());
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            ResetUsers();
         }
     }
 }

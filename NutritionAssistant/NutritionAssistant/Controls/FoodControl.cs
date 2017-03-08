@@ -15,9 +15,9 @@ namespace NutritionAssistant.Controls
     public partial class FoodControl : UserControl
     {
         Food food;
-        Form parent;
+        MainForm parent;
 
-        public FoodControl(Food _food, Form _parent)
+        public FoodControl(Food _food, MainForm _parent)
         {
             InitializeComponent();
 

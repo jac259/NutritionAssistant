@@ -8,6 +8,8 @@ namespace NutritionAssistant.JSON
 {
     public class Food
     {
+        public double servings { get; set; } = 1.0;
+
         public string brand_name { get; set; }
         public string item_name { get; set; }
         public string brand_id { get; set; }

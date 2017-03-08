@@ -38,6 +38,7 @@
             this.lblFoodTitle = new System.Windows.Forms.Label();
             this.lblCalTitle = new System.Windows.Forms.Label();
             this.flpResults = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnReset = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pboAttribution)).BeginInit();
             this.gboMain.SuspendLayout();
             this.SuspendLayout();
@@ -94,9 +95,9 @@
             // lblCalories
             // 
             this.lblCalories.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lblCalories.Location = new System.Drawing.Point(15, 10);
+            this.lblCalories.Location = new System.Drawing.Point(15, 332);
             this.lblCalories.Name = "lblCalories";
-            this.lblCalories.Size = new System.Drawing.Size(178, 18);
+            this.lblCalories.Size = new System.Drawing.Size(307, 18);
             this.lblCalories.TabIndex = 5;
             this.lblCalories.Text = "Calories consumed: ";
             this.lblCalories.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -142,11 +143,22 @@
             this.flpResults.TabIndex = 3;
             this.flpResults.WrapContents = false;
             // 
+            // btnReset
+            // 
+            this.btnReset.Location = new System.Drawing.Point(15, 8);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(75, 23);
+            this.btnReset.TabIndex = 7;
+            this.btnReset.Text = "New Day";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 362);
+            this.Controls.Add(this.btnReset);
             this.Controls.Add(this.gboMain);
             this.Controls.Add(this.lblCalories);
             this.Controls.Add(this.txtQuery);
@@ -176,5 +188,6 @@
         private System.Windows.Forms.FlowLayoutPanel flpResults;
         private System.Windows.Forms.Label lblCalTitle;
         private System.Windows.Forms.Label lblFoodTitle;
+        private System.Windows.Forms.Button btnReset;
     }
 }

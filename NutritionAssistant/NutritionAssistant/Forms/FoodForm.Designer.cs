@@ -71,7 +71,7 @@
             // lblSizeTitle
             // 
             this.lblSizeTitle.AutoSize = true;
-            this.lblSizeTitle.Location = new System.Drawing.Point(9, 67);
+            this.lblSizeTitle.Location = new System.Drawing.Point(9, 65);
             this.lblSizeTitle.Name = "lblSizeTitle";
             this.lblSizeTitle.Size = new System.Drawing.Size(63, 13);
             this.lblSizeTitle.TabIndex = 3;
@@ -95,6 +95,7 @@
             this.btnAdd.TabIndex = 6;
             this.btnAdd.Text = "Add";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnCancel
             // 

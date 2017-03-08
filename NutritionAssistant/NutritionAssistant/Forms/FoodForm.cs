@@ -15,10 +15,10 @@ namespace NutritionAssistant.Forms
     public partial class FoodForm : Form
     {
         Food food;
-        Form calledBy;
+        MainForm calledBy;
         NutritionControl[] nutrFacts;
 
-        public FoodForm(Food _food, Form _calledBy)
+        public FoodForm(Food _food, MainForm _calledBy)
         {
             StartPosition = FormStartPosition.CenterScreen;
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -75,6 +75,45 @@ namespace NutritionAssistant.Forms
             return double.TryParse(s, out output) ? output : 0;
         }
 
+        bool DataValidation()
+        {
+            double d;
+            bool b = double.TryParse(txtServings.Text, out d);
+
+            if (!b)
+                MessageBox.Show("Please enter a valid number of servings.", "Invalid serving", MessageBoxButtons.OK);
+
+            return b;
+        }
+
+        private List<User> GetAllUsers()
+        {
+            return UserForm.ReadJSON(UserForm.GetFilepath());
+        }
+
+        private void UpdateUser()
+        {
+            if (!DataValidation())
+                return;
+
+            food.servings = ParseDbl(txtServings.Text);
+
+            List<User> users = GetAllUsers();
+            User user = users.Find(x => x.id == calledBy.currentUser.id);
+            int i = users.IndexOf(user);
+
+            if (user.food_eaten == null)
+                user.food_eaten = new List<Food>();
+            user.food_eaten.Add(food);
+            user.eaten_cal += (int)(ParseDbl(food.nf_calories) * ParseDbl(txtServings.Text));
+
+            users[i] = user;
+            UserForm.WriteJSON(users, UserForm.GetFilepath());
+
+            calledBy.currentUser = user;
+            calledBy.SetCalories();
+        }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -88,6 +127,12 @@ namespace NutritionAssistant.Forms
             }
             flpNutrition.Controls.Clear();
             flpNutrition.Controls.AddRange(nutrFacts);
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            UpdateUser();
+            this.Close();
         }
     }
 }

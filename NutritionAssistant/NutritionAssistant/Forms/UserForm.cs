@@ -53,7 +53,8 @@ namespace NutritionAssistant
 
         void GetUsers()
         {
-            if (!File.Exists(GetFilepath())) {
+            if (!File.Exists(GetFilepath()))
+            {
                 users = new List<User>();
                 WriteJSON();
                 return;
@@ -62,18 +63,18 @@ namespace NutritionAssistant
             ReadJSON();
         }
 
-        //List<string> GetNames()
-        //{
-        //    List<string> names = new List<string>();
+        static List<User> GetUsers(string filepath)
+        {
+            if (!File.Exists(filepath))
+            {
+                List<User> newUsers = new List<User>();
+                WriteJSON(newUsers, filepath);
+                return newUsers;
+            }
 
-        //    foreach (User user in users)
-        //        names.Add(user.name);
-
-        //    names.Add(newUserName);
-
-        //    return names;
-        //}
-
+            return ReadJSON(filepath);
+        }
+        
         User GetLoggedIn()
         {
             return users.Find(x => x.logged_in);
@@ -87,8 +88,8 @@ namespace NutritionAssistant
         void SetLoggedIn(User newLogin)
         {
             User oldLogin = GetLoggedIn();
-            EditUser(oldLogin, oldLogin.setLogin(false));
-            EditUser(newLogin, newLogin.setLogin(true));
+            EditUser(oldLogin, oldLogin.SetLogin(false));
+            EditUser(newLogin, newLogin.SetLogin(true));
         }
 
         void SetupCboUsers()
@@ -129,6 +130,15 @@ namespace NutritionAssistant
             {
                 JsonSerializer js = new JsonSerializer();
                 js.Serialize(file, users);
+            }
+        }
+
+        public static void WriteJSON(List<User> _users, string filepath)
+        {
+            using (StreamWriter file = File.CreateText(filepath))
+            {
+                JsonSerializer js = new JsonSerializer();
+                js.Serialize(file, _users);
             }
         }
 

@@ -17,6 +17,7 @@ namespace NutritionAssistant.JSON
             daily_cal = _daily_cal;
             eaten_cal = 0;
             logged_in = false;
+            food_eaten = new List<Food>();
         }
 
         public int id { get; set; }
@@ -28,20 +29,25 @@ namespace NutritionAssistant.JSON
         public bool logged_in { get; set; }
         public List<Food> food_eaten { get; set; }
 
-        public double bmi()
+        public double BMI()
         {
             return weight_kg / (height_m * height_m);
         }
 
-        public int calRemain()
+        public int CalRemain()
         {
             return daily_cal - eaten_cal;
         }
 
-        public User setLogin(bool login)
+        public User SetLogin(bool login)
         {
             logged_in = login;
             return this;
+        }
+
+        public void AddFood(Food food)
+        {
+            food_eaten.Add(food);
         }
     }
 }
