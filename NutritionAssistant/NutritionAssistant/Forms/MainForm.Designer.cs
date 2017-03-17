@@ -32,33 +32,34 @@
             this.txtQuery = new System.Windows.Forms.TextBox();
             this.btnUsers = new System.Windows.Forms.Button();
             this.lblCurrentUser = new System.Windows.Forms.Label();
-            this.pboAttribution = new System.Windows.Forms.PictureBox();
             this.lblCalories = new System.Windows.Forms.Label();
             this.gboMain = new System.Windows.Forms.GroupBox();
             this.lblFoodTitle = new System.Windows.Forms.Label();
             this.lblCalTitle = new System.Windows.Forms.Label();
             this.flpResults = new System.Windows.Forms.FlowLayoutPanel();
             this.btnReset = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pboAttribution)).BeginInit();
+            this.pboAttribution = new System.Windows.Forms.PictureBox();
+            this.btnEaten = new System.Windows.Forms.Button();
             this.gboMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pboAttribution)).BeginInit();
             this.SuspendLayout();
             // 
             // btnQuery
             // 
-            this.btnQuery.Location = new System.Drawing.Point(15, 294);
+            this.btnQuery.Location = new System.Drawing.Point(175, 292);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(75, 23);
-            this.btnQuery.TabIndex = 0;
+            this.btnQuery.TabIndex = 1;
             this.btnQuery.Text = "Search";
             this.btnQuery.UseVisualStyleBackColor = true;
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
             // 
             // txtQuery
             // 
-            this.txtQuery.Location = new System.Drawing.Point(96, 296);
+            this.txtQuery.Location = new System.Drawing.Point(15, 294);
             this.txtQuery.Name = "txtQuery";
             this.txtQuery.Size = new System.Drawing.Size(154, 20);
-            this.txtQuery.TabIndex = 1;
+            this.txtQuery.TabIndex = 0;
             this.txtQuery.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtQuery_KeyPress);
             // 
             // btnUsers
@@ -66,7 +67,7 @@
             this.btnUsers.Location = new System.Drawing.Point(392, 8);
             this.btnUsers.Name = "btnUsers";
             this.btnUsers.Size = new System.Drawing.Size(83, 23);
-            this.btnUsers.TabIndex = 2;
+            this.btnUsers.TabIndex = 4;
             this.btnUsers.Text = "Change User";
             this.btnUsers.UseVisualStyleBackColor = true;
             this.btnUsers.Click += new System.EventHandler(this.btnUsers_click);
@@ -81,16 +82,6 @@
             this.lblCurrentUser.TabIndex = 3;
             this.lblCurrentUser.Text = "Not logged in";
             this.lblCurrentUser.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // pboAttribution
-            // 
-            this.pboAttribution.Image = global::NutritionAssistant.Properties.Resources.nutritionix_attribution_alpha;
-            this.pboAttribution.Location = new System.Drawing.Point(328, 315);
-            this.pboAttribution.Name = "pboAttribution";
-            this.pboAttribution.Size = new System.Drawing.Size(147, 35);
-            this.pboAttribution.TabIndex = 4;
-            this.pboAttribution.TabStop = false;
-            this.pboAttribution.Click += new System.EventHandler(this.pboAttribution_Click);
             // 
             // lblCalories
             // 
@@ -148,16 +139,37 @@
             this.btnReset.Location = new System.Drawing.Point(15, 8);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(75, 23);
-            this.btnReset.TabIndex = 7;
+            this.btnReset.TabIndex = 2;
             this.btnReset.Text = "New Day";
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
+            // pboAttribution
+            // 
+            this.pboAttribution.Image = global::NutritionAssistant.Properties.Resources.nutritionix_attribution_alpha;
+            this.pboAttribution.Location = new System.Drawing.Point(328, 315);
+            this.pboAttribution.Name = "pboAttribution";
+            this.pboAttribution.Size = new System.Drawing.Size(147, 35);
+            this.pboAttribution.TabIndex = 4;
+            this.pboAttribution.TabStop = false;
+            this.pboAttribution.Click += new System.EventHandler(this.pboAttribution_Click);
+            // 
+            // btnEaten
+            // 
+            this.btnEaten.Location = new System.Drawing.Point(94, 8);
+            this.btnEaten.Name = "btnEaten";
+            this.btnEaten.Size = new System.Drawing.Size(75, 23);
+            this.btnEaten.TabIndex = 3;
+            this.btnEaten.Text = "Eaten Food";
+            this.btnEaten.UseVisualStyleBackColor = true;
+            this.btnEaten.Click += new System.EventHandler(this.btnEaten_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 362);
+            this.Controls.Add(this.btnEaten);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.gboMain);
             this.Controls.Add(this.lblCalories);
@@ -168,9 +180,9 @@
             this.Controls.Add(this.btnUsers);
             this.Name = "MainForm";
             this.Text = "Nutrition Assistant";
-            ((System.ComponentModel.ISupportInitialize)(this.pboAttribution)).EndInit();
             this.gboMain.ResumeLayout(false);
             this.gboMain.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pboAttribution)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -189,5 +201,6 @@
         private System.Windows.Forms.Label lblCalTitle;
         private System.Windows.Forms.Label lblFoodTitle;
         private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.Button btnEaten;
     }
 }

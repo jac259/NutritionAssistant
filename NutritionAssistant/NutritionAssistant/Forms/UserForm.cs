@@ -35,6 +35,8 @@ namespace NutritionAssistant
             MinimizeBox = false;
 
             InitializeComponent();
+            this.Icon = NutritionAssistant.Properties.Resources.Nutrition_Assistant;
+            btnSave.Enabled = unsaved;
 
             SetupControls();
         }
@@ -77,7 +79,12 @@ namespace NutritionAssistant
         
         User GetLoggedIn()
         {
-            return users.Find(x => x.logged_in);
+            User user = users.Find(x => x.logged_in);
+
+            if (user == null)
+                return users[0];
+
+            return user;
         }
 
         public static User GetLoggedIn(List<User> _users)
@@ -203,6 +210,9 @@ namespace NutritionAssistant
             //cboUsers.DataSource = users;
             SetupCboUsers();
             cboUsers.SelectedIndex = i;
+
+            unsaved = false;
+            btnSave.Enabled = unsaved;
         }
 
         void CloseDialog()
@@ -257,7 +267,7 @@ namespace NutritionAssistant
                 txtCalories.Text = users[i].daily_cal.ToString();
                 unsaved = false;
             }
-            
+            btnSave.Enabled = unsaved;
         }
 
         private void cboUsers_DataSourceChanged(object sender, EventArgs e)
@@ -282,21 +292,25 @@ namespace NutritionAssistant
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             unsaved = true;
+            btnSave.Enabled = unsaved;
         }
 
         private void txtWeight_TextChanged(object sender, EventArgs e)
         {
             unsaved = true;
+            btnSave.Enabled = unsaved;
         }
 
         private void txtCalories_TextChanged(object sender, EventArgs e)
         {
             unsaved = true;
+            btnSave.Enabled = unsaved;
         }
 
         private void txtHeight_TextChanged(object sender, EventArgs e)
         {
             unsaved = true;
+            btnSave.Enabled = unsaved;
         }
     }
 }

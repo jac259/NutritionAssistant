@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace NutritionAssistant.JSON
 {
-    public class RootObject
+    public class Results
     {
         public int total { get; set; }
-        public double max_score { get; set; }
+        private object max_score { get; set; }
         public List<Hit> hits { get; set; }
 
         public string Print()
@@ -47,6 +47,15 @@ namespace NutritionAssistant.JSON
                 foods.Add(hits[i].fields);
 
             return foods;
+        }
+
+        public double GetMaxScore()
+        {
+            double d;
+            if (double.TryParse(max_score.ToString(), out d))
+                return d;
+
+            return -1;
         }
     }
 }

@@ -49,5 +49,15 @@ namespace NutritionAssistant.JSON
         {
             food_eaten.Add(food);
         }
+
+        public int EatenCal()
+        {
+            int cal = 0;
+            for(int i = 0; i < food_eaten.Count; ++i)
+            {
+                cal += (int)(double.Parse(food_eaten[i].nf_calories) * food_eaten[i].servings);
+            }
+            return cal;
+        }
     }
 }

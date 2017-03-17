@@ -30,28 +30,41 @@ namespace NutritionAssistant
             MinimizeBox = false;
 
             InitializeComponent();
+            this.Icon = NutritionAssistant.Properties.Resources.Nutrition_Assistant;
             GetCurrentUser();
             SetCalories();
         }
 
         public void GetCurrentUser()
         {
-            //string fp = UserForm.GetFilepath();
-            //List<User> users = UserForm.ReadJSON(fp);
             List<User> users = GetAllUsers();
             User user = UserForm.GetLoggedIn(users);
             SetCurrentUser(user);
         }
 
-        public void PopulateResults(List<Food> foods)
+        public void PopulateResults(List<Food> foods, bool edit)
         {
             flpResults.Controls.Clear();
 
             for (int i = 0; i < foods.Count; i++)
-                flpResults.Controls.Add(new FoodControl(foods[i], this));
+                flpResults.Controls.Add(new FoodControl(foods[i], this, edit));
 
-            lblCalTitle.Visible = true;
-            lblFoodTitle.Visible = true;
+            lblCalTitle.Visible = foods.Count != 0;
+            lblFoodTitle.Visible = foods.Count != 0;
+        }
+
+        public void ClearResults()
+        {
+            flpResults.Controls.Clear();
+            txtQuery.Clear();
+
+            lblCalTitle.Visible = false;
+            lblFoodTitle.Visible = false;
+        }
+
+        public List<Food> GetFoodEaten(User user)
+        {
+            return user.food_eaten;
         }
 
         public void SetCurrentUser(User user)
@@ -69,6 +82,7 @@ namespace NutritionAssistant
         public void SetCalories()
         {
             lblCalories.Text = "Calories consumed: " + currentUser.eaten_cal.ToString() + "  (Max: " + currentUser.daily_cal.ToString() + ")";
+            btnEaten.Enabled = currentUser.eaten_cal != 0;
         }
 
         public List<User> GetAllUsers()
@@ -101,23 +115,32 @@ namespace NutritionAssistant
             SetCalories();
         }
 
+        private bool CheckHits(string message)
+        {
+            JavaScriptSerializer jss = new JavaScriptSerializer();
+            return true;
+        }
+
         private async void btnQuery_Click(object sender, System.EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtQuery.Text))
-            {
-                MessageBox.Show("Please enter a query.", "Error", MessageBoxButtons.OK);
+            string queryString = txtQuery.Text;
+
+            if (string.IsNullOrEmpty(queryString))
                 return;
-            }
 
-            string message = await Query.query(txtQuery.Text);
+            ClearResults();
 
-            JavaScriptSerializer jss = new JavaScriptSerializer();
-            RootObject ro = jss.Deserialize<RootObject>(message);
+            string message = await Query.query(queryString);
 
-            PopulateResults(ro.GetFoods());
+            //JavaScriptSerializer jss = new JavaScriptSerializer();
+            //Results ro = jss.Deserialize<Results>(message);
 
-            //MessageBoxButtons btns = MessageBoxButtons.OK;
-            //MessageBox.Show(ro.Print(), "Results", btns);
+            Results ro = JsonConvert.DeserializeObject<Results>(message);
+
+            if (ro.total == 0)
+                MessageBox.Show("No results found for \"" + queryString + "\"", "No results", MessageBoxButtons.OK);
+            else
+                PopulateResults(ro.GetFoods(), false);
         }
 
         private void btnUsers_click(object sender, EventArgs e)
@@ -140,6 +163,17 @@ namespace NutritionAssistant
         private void btnReset_Click(object sender, EventArgs e)
         {
             ResetUsers();
+            ClearResults();
+        }
+
+        private void btnEaten_Click(object sender, EventArgs e)
+        {
+            if (currentUser.eaten_cal == 0)
+                ClearResults();
+
+            PopulateResults(GetFoodEaten(currentUser), true);
+
+            txtQuery.Clear();
         }
     }
 }

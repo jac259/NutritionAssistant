@@ -86,7 +86,7 @@
     </Compile>
     <Compile Include="JSON\Fields.cs" />
     <Compile Include="JSON\Hit.cs" />
-    <Compile Include="JSON\RootObject.cs" />
+    <Compile Include="JSON\Results.cs" />
     <Compile Include="JSON\User.cs" />
     <Compile Include="JSON\Food.cs" />
     <Compile Include="Forms\MainForm.cs">
@@ -144,6 +144,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\icon.ico" />
+    <None Include="Resources\Nutrition Assistant.ico" />
     <None Include="Images\nutritionix_attribution_alpha.png" />
     <Content Include="Keys.txt" />
     <None Include="Resources\NutritionixAttribution.bmp" />

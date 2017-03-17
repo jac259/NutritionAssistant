@@ -17,18 +17,24 @@ namespace NutritionAssistant.Forms
         Food food;
         MainForm calledBy;
         NutritionControl[] nutrFacts;
+        bool edit;
 
-        public FoodForm(Food _food, MainForm _calledBy)
+        public FoodForm(Food _food, MainForm _calledBy, bool _edit)
         {
             StartPosition = FormStartPosition.CenterScreen;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             MinimizeBox = false;
 
-            InitializeComponent();
-
+            edit = _edit;
             calledBy = _calledBy;
             food = _food;
+
+            InitializeComponent();
+            this.Icon = NutritionAssistant.Properties.Resources.Nutrition_Assistant;
+            btnAdd.Text = edit ? "Save" : "Add";
+            this.Text = edit ? "Edit Food" : "Add Food";
+
             PopulateFields();
         }
 
@@ -37,6 +43,7 @@ namespace NutritionAssistant.Forms
             lblName.Text = food.item_name;
             SetServingSize(food.nf_serving_size_qty, food.nf_serving_size_unit);
             SetNutrition(food);
+            txtServings.Text = food.servings.ToString();
         }
 
         public void SetServingSize(string qty, string units)
@@ -80,6 +87,8 @@ namespace NutritionAssistant.Forms
             double d;
             bool b = double.TryParse(txtServings.Text, out d);
 
+            b = b && (d != 0 || edit);
+
             if (!b)
                 MessageBox.Show("Please enter a valid number of servings.", "Invalid serving", MessageBoxButtons.OK);
 
@@ -96,7 +105,7 @@ namespace NutritionAssistant.Forms
             if (!DataValidation())
                 return;
 
-            food.servings = ParseDbl(txtServings.Text);
+            double newServings = ParseDbl(txtServings.Text);
 
             List<User> users = GetAllUsers();
             User user = users.Find(x => x.id == calledBy.currentUser.id);
@@ -104,14 +113,44 @@ namespace NutritionAssistant.Forms
 
             if (user.food_eaten == null)
                 user.food_eaten = new List<Food>();
-            user.food_eaten.Add(food);
-            user.eaten_cal += (int)(ParseDbl(food.nf_calories) * ParseDbl(txtServings.Text));
+
+            if (edit)
+            {
+                double oldServings = food.servings;
+                int foodIndex = user.food_eaten.IndexOf(user.food_eaten.Find(x => x.item_id == food.item_id));
+
+                food.servings = newServings;
+
+                if (newServings == 0)
+                    user.food_eaten.RemoveAt(foodIndex);
+                else
+                    user.food_eaten[foodIndex] = food;
+            }
+            else
+            {
+                int foodIndex = user.food_eaten.IndexOf(user.food_eaten.Find(x => x.item_id == food.item_id));
+
+                if(foodIndex != -1)
+                {
+                    food.servings = newServings + user.food_eaten[foodIndex].servings;
+                    user.food_eaten[foodIndex] = food;
+                }
+                else
+                {
+                    food.servings = newServings;
+                    user.food_eaten.Add(food);
+                }
+            }
+
+            user.eaten_cal = user.EatenCal();
 
             users[i] = user;
             UserForm.WriteJSON(users, UserForm.GetFilepath());
 
             calledBy.currentUser = user;
             calledBy.SetCalories();
+            if (edit)
+                calledBy.PopulateResults(user.food_eaten, true);
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
