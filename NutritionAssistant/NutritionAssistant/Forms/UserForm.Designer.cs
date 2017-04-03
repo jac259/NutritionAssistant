@@ -118,9 +118,9 @@
             this.lblHeight.AutoSize = true;
             this.lblHeight.Location = new System.Drawing.Point(18, 79);
             this.lblHeight.Name = "lblHeight";
-            this.lblHeight.Size = new System.Drawing.Size(61, 13);
+            this.lblHeight.Size = new System.Drawing.Size(55, 13);
             this.lblHeight.TabIndex = 7;
-            this.lblHeight.Text = "Height (cm)";
+            this.lblHeight.Text = "Height (m)";
             // 
             // lblWeight
             // 

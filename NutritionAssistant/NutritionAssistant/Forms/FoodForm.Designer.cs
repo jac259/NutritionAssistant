@@ -73,9 +73,9 @@
             this.lblSizeTitle.AutoSize = true;
             this.lblSizeTitle.Location = new System.Drawing.Point(9, 65);
             this.lblSizeTitle.Name = "lblSizeTitle";
-            this.lblSizeTitle.Size = new System.Drawing.Size(63, 13);
+            this.lblSizeTitle.Size = new System.Drawing.Size(66, 13);
             this.lblSizeTitle.TabIndex = 3;
-            this.lblSizeTitle.Text = "Seving Size";
+            this.lblSizeTitle.Text = "Serving Size";
             // 
             // lblSize
             // 

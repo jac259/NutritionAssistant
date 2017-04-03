@@ -53,6 +53,11 @@ namespace NutritionAssistant
             return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).Substring(6) + '\\' + filename;
         }
 
+        public static string GetFilepath(string _filename)
+        {
+            return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).Substring(6) + '\\' + _filename;
+        }
+
         void GetUsers()
         {
             if (!File.Exists(GetFilepath()))
@@ -74,7 +79,7 @@ namespace NutritionAssistant
                 return newUsers;
             }
 
-            return ReadJSON(filepath);
+            return ReadUserJSON(filepath);
         }
         
         User GetLoggedIn()
@@ -149,6 +154,15 @@ namespace NutritionAssistant
             }
         }
 
+        public static void WriteJSON(List<Food> _foods, string filepath)
+        {
+            using (StreamWriter file = File.CreateText(filepath))
+            {
+                JsonSerializer js = new JsonSerializer();
+                js.Serialize(file, _foods);
+            }
+        }
+
         void ReadJSON()
         {
             using (StreamReader file = File.OpenText(GetFilepath()))
@@ -158,12 +172,21 @@ namespace NutritionAssistant
             }
         }
 
-        public static List<User> ReadJSON(string filepath)
+        public static List<User> ReadUserJSON(string filepath)
         {
             using (StreamReader file = File.OpenText(filepath))
             {
                 JsonSerializer js = new JsonSerializer();
                 return (List<User>)js.Deserialize(file, typeof(List<User>));
+            }
+        }
+
+        public static List<Food> ReadFoodJSON(string filepath)
+        {
+            using (StreamReader file = File.OpenText(filepath))
+            {
+                JsonSerializer js = new JsonSerializer();
+                return (List<Food>)js.Deserialize(file, typeof(List<Food>));
             }
         }
 

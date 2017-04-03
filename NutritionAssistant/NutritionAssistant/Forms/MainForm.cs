@@ -15,11 +15,15 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.IO;
 using System.Diagnostics;
+using NutritionAssistant.Forms;
 
 namespace NutritionAssistant
 {
     public partial class MainForm : Form
     {
+        public enum flpItems { Custom, Eaten, Search, None };
+        public flpItems flpCurrent = flpItems.None;
+
         public User currentUser;
 
         public MainForm()
@@ -42,12 +46,12 @@ namespace NutritionAssistant
             SetCurrentUser(user);
         }
 
-        public void PopulateResults(List<Food> foods, bool edit)
+        public void PopulateResults(List<Food> foods, bool edit, bool rightClick)
         {
             flpResults.Controls.Clear();
 
             for (int i = 0; i < foods.Count; i++)
-                flpResults.Controls.Add(new FoodControl(foods[i], this, edit));
+                flpResults.Controls.Add(new FoodControl(foods[i], this, edit, rightClick));
 
             lblCalTitle.Visible = foods.Count != 0;
             lblFoodTitle.Visible = foods.Count != 0;
@@ -87,7 +91,7 @@ namespace NutritionAssistant
 
         public List<User> GetAllUsers()
         {
-            return UserForm.ReadJSON(UserForm.GetFilepath());
+            return UserForm.ReadUserJSON(UserForm.GetFilepath());
         }
 
         public void ResetUsers()
@@ -140,13 +144,15 @@ namespace NutritionAssistant
             if (ro.total == 0)
                 MessageBox.Show("No results found for \"" + queryString + "\"", "No results", MessageBoxButtons.OK);
             else
-                PopulateResults(ro.GetFoods(), false);
+                PopulateResults(ro.GetFoods(), false, false);
+
+            flpCurrent = flpItems.Search;
         }
 
         private void btnUsers_click(object sender, EventArgs e)
         {
             UserForm form = new UserForm(this);
-            form.Show();
+            form.ShowDialog();
         }
 
         private void pboAttribution_Click(object sender, EventArgs e)
@@ -171,9 +177,25 @@ namespace NutritionAssistant
             if (currentUser.eaten_cal == 0)
                 ClearResults();
 
-            PopulateResults(GetFoodEaten(currentUser), true);
+            PopulateResults(GetFoodEaten(currentUser), true, true);
 
             txtQuery.Clear();
+
+            flpCurrent = flpItems.Eaten;
+        }
+
+        private void btnCustom_Click(object sender, EventArgs e)
+        {
+            CustomForm form = new CustomForm(this);
+            form.ShowDialog();
+        }
+
+        private void btnShowCustom_Click(object sender, EventArgs e)
+        {
+            List<Food> customFood = CustomForm.GetCustomFood(UserForm.GetFilepath(CustomForm.foodFile));
+            PopulateResults(customFood, false, true);
+
+            flpCurrent = flpItems.Custom;
         }
     }
 }

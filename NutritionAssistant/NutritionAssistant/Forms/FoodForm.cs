@@ -48,7 +48,10 @@ namespace NutritionAssistant.Forms
 
         public void SetServingSize(string qty, string units)
         {
-            lblSize.Text = qty + " " + units;
+            string txt = qty + " " + units;
+            lblSize.Text = string.IsNullOrWhiteSpace(txt) ? "1 serving" : txt;
+
+            //lblSize.Text = qty + " " + units;
         }
 
         public void SetNutrition(Food _food)
@@ -95,15 +98,13 @@ namespace NutritionAssistant.Forms
             return b;
         }
 
-        private List<User> GetAllUsers()
+        public static List<User> GetAllUsers()
         {
-            return UserForm.ReadJSON(UserForm.GetFilepath());
+            return UserForm.ReadUserJSON(UserForm.GetFilepath());
         }
 
         private void UpdateUser()
         {
-            if (!DataValidation())
-                return;
 
             double newServings = ParseDbl(txtServings.Text);
 
@@ -150,7 +151,7 @@ namespace NutritionAssistant.Forms
             calledBy.currentUser = user;
             calledBy.SetCalories();
             if (edit)
-                calledBy.PopulateResults(user.food_eaten, true);
+                calledBy.PopulateResults(user.food_eaten, true, true);
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -170,6 +171,9 @@ namespace NutritionAssistant.Forms
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
+            if (!DataValidation())
+                return;
+
             UpdateUser();
             this.Close();
         }

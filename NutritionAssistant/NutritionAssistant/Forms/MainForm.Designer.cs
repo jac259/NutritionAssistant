@@ -39,7 +39,9 @@
             this.flpResults = new System.Windows.Forms.FlowLayoutPanel();
             this.btnReset = new System.Windows.Forms.Button();
             this.pboAttribution = new System.Windows.Forms.PictureBox();
+            this.btnCustom = new System.Windows.Forms.Button();
             this.btnEaten = new System.Windows.Forms.Button();
+            this.btnShowCustom = new System.Windows.Forms.Button();
             this.gboMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pboAttribution)).BeginInit();
             this.SuspendLayout();
@@ -154,21 +156,43 @@
             this.pboAttribution.TabStop = false;
             this.pboAttribution.Click += new System.EventHandler(this.pboAttribution_Click);
             // 
+            // btnCustom
+            // 
+            this.btnCustom.Location = new System.Drawing.Point(256, 292);
+            this.btnCustom.Name = "btnCustom";
+            this.btnCustom.Size = new System.Drawing.Size(75, 23);
+            this.btnCustom.TabIndex = 7;
+            this.btnCustom.Text = "Create Food";
+            this.btnCustom.UseVisualStyleBackColor = true;
+            this.btnCustom.Click += new System.EventHandler(this.btnCustom_Click);
+            // 
             // btnEaten
             // 
-            this.btnEaten.Location = new System.Drawing.Point(94, 8);
+            this.btnEaten.Location = new System.Drawing.Point(95, 8);
             this.btnEaten.Name = "btnEaten";
             this.btnEaten.Size = new System.Drawing.Size(75, 23);
             this.btnEaten.TabIndex = 3;
-            this.btnEaten.Text = "Eaten Food";
+            this.btnEaten.Text = "View Eaten";
             this.btnEaten.UseVisualStyleBackColor = true;
             this.btnEaten.Click += new System.EventHandler(this.btnEaten_Click);
+            // 
+            // btnShowCustom
+            // 
+            this.btnShowCustom.Location = new System.Drawing.Point(176, 8);
+            this.btnShowCustom.Name = "btnShowCustom";
+            this.btnShowCustom.Size = new System.Drawing.Size(78, 23);
+            this.btnShowCustom.TabIndex = 8;
+            this.btnShowCustom.Text = "View Created";
+            this.btnShowCustom.UseVisualStyleBackColor = true;
+            this.btnShowCustom.Click += new System.EventHandler(this.btnShowCustom_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 362);
+            this.Controls.Add(this.btnCustom);
+            this.Controls.Add(this.btnShowCustom);
             this.Controls.Add(this.btnEaten);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.gboMain);
@@ -201,6 +225,8 @@
         private System.Windows.Forms.Label lblCalTitle;
         private System.Windows.Forms.Label lblFoodTitle;
         private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.Button btnCustom;
         private System.Windows.Forms.Button btnEaten;
+        private System.Windows.Forms.Button btnShowCustom;
     }
 }

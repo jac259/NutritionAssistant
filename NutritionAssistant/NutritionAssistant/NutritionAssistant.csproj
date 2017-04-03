@@ -72,6 +72,12 @@
     <Compile Include="Controls\FoodControl.Designer.cs">
       <DependentUpon>FoodControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\NutritionAddControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\NutritionAddControl.Designer.cs">
+      <DependentUpon>NutritionAddControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NutritionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -83,6 +89,12 @@
     </Compile>
     <Compile Include="Forms\FoodForm.Designer.cs">
       <DependentUpon>FoodForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CustomForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CustomForm.Designer.cs">
+      <DependentUpon>CustomForm.cs</DependentUpon>
     </Compile>
     <Compile Include="JSON\Fields.cs" />
     <Compile Include="JSON\Hit.cs" />
@@ -107,6 +119,9 @@
     <EmbeddedResource Include="Controls\FoodControl.resx">
       <DependentUpon>FoodControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\NutritionAddControl.resx">
+      <DependentUpon>NutritionAddControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\NutritionControl.resx">
       <DependentUpon>NutritionControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -115,6 +130,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CustomForm.resx">
+      <DependentUpon>CustomForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
