@@ -41,6 +41,7 @@
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.lblUser = new System.Windows.Forms.Label();
+            this.btnReset = new System.Windows.Forms.Button();
             this.gboUserInfo.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -97,7 +98,7 @@
             this.gboUserInfo.Controls.Add(this.txtHeight);
             this.gboUserInfo.Controls.Add(this.txtWeight);
             this.gboUserInfo.Controls.Add(this.txtName);
-            this.gboUserInfo.Location = new System.Drawing.Point(13, 39);
+            this.gboUserInfo.Location = new System.Drawing.Point(13, 45);
             this.gboUserInfo.Name = "gboUserInfo";
             this.gboUserInfo.Size = new System.Drawing.Size(259, 140);
             this.gboUserInfo.TabIndex = 1;
@@ -170,11 +171,22 @@
             this.lblUser.TabIndex = 11;
             this.lblUser.Text = "User:";
             // 
+            // btnReset
+            // 
+            this.btnReset.Location = new System.Drawing.Point(13, 10);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(83, 23);
+            this.btnReset.TabIndex = 12;
+            this.btnReset.Text = "Reset Food";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
             // UserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 226);
+            this.Controls.Add(this.btnReset);
             this.Controls.Add(this.lblUser);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnUpdate);
@@ -204,5 +216,6 @@
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Label lblUser;
+        private System.Windows.Forms.Button btnReset;
     }
 }

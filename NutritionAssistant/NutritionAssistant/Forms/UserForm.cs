@@ -335,5 +335,11 @@ namespace NutritionAssistant
             unsaved = true;
             btnSave.Enabled = unsaved;
         }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            calledBy.ResetUser(currentUser);
+            MessageBox.Show(currentUser.name + "'s daily food successfully reset.", "Reset", MessageBoxButtons.OK);
+        }
     }
 }

@@ -104,10 +104,8 @@ namespace NutritionAssistant.Controls
                 }
 
             }
-            else if (parent.flpCurrent == MainForm.flpItems.Search)
-            {
+            else if (parent.flpCurrent == MainForm.flpItems.Search)            
                 return;
-            }
         }
 
         public void FoodControl_Click(object sender, EventArgs e)
@@ -120,7 +118,7 @@ namespace NutritionAssistant.Controls
                     cm.MenuItems.Add(edit ? "Edit servings" : "Add to eaten", MenuAdd_Click);
                     if (parent.flpCurrent == MainForm.flpItems.Custom)
                         cm.MenuItems.Add("Edit food", MenuEdit_Click);
-                    cm.MenuItems.Add("Delete", MenuDelete_Click);
+                    cm.MenuItems.Add(edit ? "Remove" : "Delete", MenuDelete_Click);
                     this.ContextMenu = cm;
                 }
             }

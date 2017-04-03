@@ -37,7 +37,6 @@
             this.lblFoodTitle = new System.Windows.Forms.Label();
             this.lblCalTitle = new System.Windows.Forms.Label();
             this.flpResults = new System.Windows.Forms.FlowLayoutPanel();
-            this.btnReset = new System.Windows.Forms.Button();
             this.pboAttribution = new System.Windows.Forms.PictureBox();
             this.btnCustom = new System.Windows.Forms.Button();
             this.btnEaten = new System.Windows.Forms.Button();
@@ -136,16 +135,6 @@
             this.flpResults.TabIndex = 3;
             this.flpResults.WrapContents = false;
             // 
-            // btnReset
-            // 
-            this.btnReset.Location = new System.Drawing.Point(15, 8);
-            this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(75, 23);
-            this.btnReset.TabIndex = 2;
-            this.btnReset.Text = "New Day";
-            this.btnReset.UseVisualStyleBackColor = true;
-            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
-            // 
             // pboAttribution
             // 
             this.pboAttribution.Image = global::NutritionAssistant.Properties.Resources.nutritionix_attribution_alpha;
@@ -168,7 +157,7 @@
             // 
             // btnEaten
             // 
-            this.btnEaten.Location = new System.Drawing.Point(95, 8);
+            this.btnEaten.Location = new System.Drawing.Point(15, 8);
             this.btnEaten.Name = "btnEaten";
             this.btnEaten.Size = new System.Drawing.Size(75, 23);
             this.btnEaten.TabIndex = 3;
@@ -178,7 +167,7 @@
             // 
             // btnShowCustom
             // 
-            this.btnShowCustom.Location = new System.Drawing.Point(176, 8);
+            this.btnShowCustom.Location = new System.Drawing.Point(96, 8);
             this.btnShowCustom.Name = "btnShowCustom";
             this.btnShowCustom.Size = new System.Drawing.Size(78, 23);
             this.btnShowCustom.TabIndex = 8;
@@ -194,7 +183,6 @@
             this.Controls.Add(this.btnCustom);
             this.Controls.Add(this.btnShowCustom);
             this.Controls.Add(this.btnEaten);
-            this.Controls.Add(this.btnReset);
             this.Controls.Add(this.gboMain);
             this.Controls.Add(this.lblCalories);
             this.Controls.Add(this.txtQuery);
@@ -224,7 +212,6 @@
         private System.Windows.Forms.FlowLayoutPanel flpResults;
         private System.Windows.Forms.Label lblCalTitle;
         private System.Windows.Forms.Label lblFoodTitle;
-        private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Button btnCustom;
         private System.Windows.Forms.Button btnEaten;
         private System.Windows.Forms.Button btnShowCustom;

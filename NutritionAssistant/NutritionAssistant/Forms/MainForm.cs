@@ -105,14 +105,35 @@ namespace NutritionAssistant
 
                 if (tempUser.food_eaten == null)
                     tempUser.food_eaten = new List<Food>();
-
-                tempUser.food_eaten.Clear();
+                else
+                    tempUser.food_eaten.Clear();
                 
                 if (tempUser.id == currentUser.id)
                     currentUser = tempUser;
 
                 users[i] = tempUser;
             }
+
+            UserForm.WriteJSON(users, UserForm.GetFilepath());
+
+            SetCalories();
+        }
+
+        public void ResetUser(User user)
+        {
+            List<User> users = GetAllUsers();
+            user.eaten_cal = 0;
+            if (user.food_eaten == null)
+                user.food_eaten = new List<Food>();
+            else
+                user.food_eaten.Clear();
+
+            if (user.id == currentUser.id)
+                currentUser = user;
+
+            int i = users.FindIndex(x => x.id == user.id);
+            if (i != -1)
+                users[i] = user;
 
             UserForm.WriteJSON(users, UserForm.GetFilepath());
 
