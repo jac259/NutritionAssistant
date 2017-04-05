@@ -116,6 +116,7 @@ namespace NutritionAssistant
 
         void SetupCboUsers()
         {
+            GetUsers();
             cboUsers.DataSource = users;
             cboUsers_DataSourceChanged(cboUsers, new EventArgs());
             cboUsers.DisplayMember = "name";
@@ -126,6 +127,7 @@ namespace NutritionAssistant
         {
             users.Add(newUser);
             WriteJSON();
+            SetupCboUsers();
             //GetUsers();
         }
 
@@ -133,6 +135,7 @@ namespace NutritionAssistant
         {
             users.Remove(users.Find(x => x.id == delUser.id));
             WriteJSON();
+            SetupCboUsers();
             //GetUsers();
         }
 
@@ -142,8 +145,8 @@ namespace NutritionAssistant
             users[i] = newUser;
             if (currentUser.id == i)
                 currentUser = newUser;
-            SetupCboUsers();
             WriteJSON();
+            SetupCboUsers();
             //GetUsers();
         }
 
@@ -293,10 +296,6 @@ namespace NutritionAssistant
             }
             else
             {
-                //SetupCboUsers();
-                //calledBy.ChangeUser(((User)cboUsers.SelectedItem));
-                //if(GetLoggedIn() != (User)cboUsers.SelectedItem)
-                //    SetLoggedIn((User)cboUsers.SelectedItem);
                 User user = users.Find(x => x.id == ((User)cboUsers.SelectedItem).id);
                 SetLoggedIn(user);
                 calledBy.ChangeUser(user);
@@ -311,8 +310,9 @@ namespace NutritionAssistant
         private void cboUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
             int i = cboUsers.SelectedIndex;
+            int i2 = users.FindIndex(x => x.name == newUserName);
 
-            if(i == users.Count - 1)
+            if(i == i2)
             {
                 txtName.Clear();
                 txtWeight.Clear();
