@@ -8,30 +8,69 @@ namespace NutritionAssistant.JSON
 {
     public class User
     {
-        public User(int _id, string _name, double _weight, double _height, int _daily_cal)
+        [Newtonsoft.Json.JsonConstructor]
+        public User(int _id, string _name, double _weight, double _height, int _age, string _sex, string _activity, int _daily_cal)
         {
             id = _id;
             name = _name;
             weight_kg = _weight;
             height_m = _height;
+            age = _age;
+            sex = _sex;
+            activity = _activity;
             daily_cal = _daily_cal;
             eaten_cal = 0;
             logged_in = false;
             food_eaten = new List<Food>();
+            archived_eaten = new Queue<List<Food>>();
         }
+
+        public User(int _id, string _name, double _weight, double _height, int _age, string _sex, string _activity)
+        {
+            id = _id;
+            name = _name;
+            weight_kg = _weight;
+            height_m = _height;
+            age = _age;
+            sex = _sex;
+            activity = _activity;
+            daily_cal = BMI();
+            eaten_cal = 0;
+            logged_in = false;
+            food_eaten = new List<Food>();
+            archived_eaten = new Queue<List<Food>>();
+        }
+
+        private Dictionary<string, double> HBF = new Dictionary<string, double>() {
+            { "Sedentary", 1.2 },
+            { "Lightly Active", 1.375 },
+            { "Moderately Active", 1.55 },
+            { "Very Active", 1.725 },
+            { "Extra Active", 1.9 }
+        };
 
         public int id { get; set; }
         public string name { get; set; }
         public double weight_kg { get; set; }
         public double height_m { get; set; }        
+        public int age { get; set; }
+        public string sex { get; set; }
+        public string activity { get; set; }
         public int daily_cal { get; set; }
         public int eaten_cal { get; set; }
         public bool logged_in { get; set; }
         public List<Food> food_eaten { get; set; }
+        public Queue<List<Food>> archived_eaten { get; set; }
 
-        public double BMI()
+        public int BMI()
         {
-            return weight_kg / (height_m * height_m);
+            double BMR = -1;
+            if (sex.ToLower() == "male")
+                BMR = (66 + 13.7 * weight_kg + 500 * height_m - 6.8 * age);
+            else if (sex.ToLower() == "female")
+                BMR = (655 + 9.6 * weight_kg + 180 * height_m - 4.7 * age);
+
+            return (int)(BMR * HBF[activity]);
         }
 
         public int CalRemain()
@@ -43,6 +82,14 @@ namespace NutritionAssistant.JSON
         {
             logged_in = login;
             return this;
+        }
+
+        public void Archive(List<Food> eaten)
+        {
+            if (archived_eaten.Count == 30)
+                archived_eaten.Dequeue();
+
+            archived_eaten.Enqueue(eaten);
         }
 
         public void AddFood(Food food)

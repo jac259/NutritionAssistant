@@ -84,24 +84,34 @@ namespace NutritionAssistant
         
         User GetLoggedIn()
         {
-            User user = users.Find(x => x.logged_in);
-
-            if (user == null)
+            int index = users.FindIndex(x => x.logged_in);
+            if (index == -1)
+            {
+                //GetUsers(GetFilepath())[0].SetLogin(true)
+                users[0] = users[0].SetLogin(true);
                 return users[0];
-
-            return user;
+            }
+            else
+                return users[index];
+            //return users.Find(x => x.logged_in == true);
         }
 
         public static User GetLoggedIn(List<User> _users)
         {
-            return _users.Find(x => x.logged_in);
+            User user = _users.Find(x => x.logged_in);
+            return user == null ? _users[0].SetLogin(true) : user;
         }
 
         void SetLoggedIn(User newLogin)
         {
-            User oldLogin = GetLoggedIn();
-            EditUser(oldLogin, oldLogin.SetLogin(false));
-            EditUser(newLogin, newLogin.SetLogin(true));
+            int i = users.FindIndex(x => x.logged_in);
+            if(i != -1)
+                users[users.FindIndex(x => x.logged_in)].logged_in = false;
+
+            newLogin.logged_in = true;
+            users[users.FindIndex(x => x.id == newLogin.id)] = newLogin;
+
+            WriteJSON();
         }
 
         void SetupCboUsers()
@@ -121,22 +131,25 @@ namespace NutritionAssistant
 
         void DeleteUser(User delUser)
         {
-            users.Remove(delUser);
+            users.Remove(users.Find(x => x.id == delUser.id));
             WriteJSON();
             //GetUsers();
         }
 
         void EditUser(User oldUser, User newUser)
         {
-            users[users.IndexOf(oldUser)] = newUser;
+            int i = users.FindIndex(x => x.id == oldUser.id);
+            users[i] = newUser;
+            if (currentUser.id == i)
+                currentUser = newUser;
+            SetupCboUsers();
             WriteJSON();
             //GetUsers();
         }
 
         void WriteJSON() 
         {
-            if (users.Last().name == newUserName)
-                users.Remove(users.Last());
+            users.RemoveAll(x => x.name == newUserName);
 
             using (StreamWriter file = File.CreateText(GetFilepath()))
             {
@@ -147,6 +160,8 @@ namespace NutritionAssistant
 
         public static void WriteJSON(List<User> _users, string filepath)
         {
+            _users.RemoveAll(x => x.name == newUserName);
+
             using (StreamWriter file = File.CreateText(filepath))
             {
                 JsonSerializer js = new JsonSerializer();
@@ -204,11 +219,16 @@ namespace NutritionAssistant
             bool valid = false;
 
             if ((string.IsNullOrWhiteSpace(txtName.Text) || string.IsNullOrWhiteSpace(txtWeight.Text) ||
-                string.IsNullOrWhiteSpace(txtHeight.Text) || string.IsNullOrWhiteSpace(txtCalories.Text)))
+                string.IsNullOrWhiteSpace(txtHeight.Text) || string.IsNullOrWhiteSpace(txtAge.Text)))
                 valid = false;
-            else if(double.TryParse(txtWeight.Text, out tempDbl) && double.TryParse(txtHeight.Text, out tempDbl) && 
-                int.TryParse(txtCalories.Text, out tempInt))
-                valid = true;
+            else if (double.TryParse(txtWeight.Text, out tempDbl) && double.TryParse(txtHeight.Text, out tempDbl) &&
+                    int.TryParse(txtAge.Text, out tempInt))
+            { 
+                if (string.IsNullOrWhiteSpace(txtCalories.Text))
+                    valid = true;
+                else if (int.TryParse(txtCalories.Text, out tempInt))
+                    valid = true;
+            }
 
             if(!valid)
                 MessageBox.Show("All fields must be filled with valid data.", "Invalid field.", MessageBoxButtons.OK);
@@ -223,12 +243,24 @@ namespace NutritionAssistant
                 return;
 
             int i = cboUsers.SelectedIndex;
+            int cal;
+            bool calBool = int.TryParse(txtCalories.Text, out cal);
             if (i == users.Count)
-                CreateUser(new User(MaxID() + 1, txtName.Text, double.Parse(txtWeight.Text),
-                    double.Parse(txtHeight.Text), int.Parse(txtCalories.Text)));
+                CreateUser(calBool ? 
+                    new User(MaxID() + 1, txtName.Text, double.Parse(txtWeight.Text),
+                    double.Parse(txtHeight.Text), int.Parse(txtAge.Text), cboSex.SelectedItem.ToString(), 
+                    cboActivity.SelectedItem.ToString(), cal) :
+                    new User(MaxID() + 1, txtName.Text, double.Parse(txtWeight.Text),
+                    double.Parse(txtHeight.Text), int.Parse(txtAge.Text), cboSex.SelectedItem.ToString(),
+                    cboActivity.SelectedItem.ToString()));
             else
-                EditUser(users[i], new User(users[i].id, txtName.Text, double.Parse(txtWeight.Text),
-                    double.Parse(txtHeight.Text), int.Parse(txtCalories.Text)));
+                EditUser(users[i], calBool ?
+                    new User(users[i].id, txtName.Text, double.Parse(txtWeight.Text),
+                    double.Parse(txtHeight.Text), int.Parse(txtAge.Text), cboSex.SelectedItem.ToString(),
+                    cboActivity.SelectedItem.ToString(), cal) :
+                    new User(users[i].id, txtName.Text, double.Parse(txtWeight.Text),
+                    double.Parse(txtHeight.Text), int.Parse(txtAge.Text), cboSex.SelectedItem.ToString(),
+                    cboActivity.SelectedItem.ToString()));
 
             //cboUsers.DataSource = users;
             SetupCboUsers();
@@ -249,8 +281,9 @@ namespace NutritionAssistant
                         if (!DataValidation())
                             return;
                         SaveChanges();
-                        calledBy.ChangeUser(((User)cboUsers.SelectedItem));
-                        SetLoggedIn((User)cboUsers.SelectedItem);
+                        User user = users.Find(x => x.id == ((User)cboUsers.SelectedItem).id);
+                        SetLoggedIn(user);
+                        calledBy.ChangeUser(user);
                         break;
                     case DialogResult.Cancel:
                         return;
@@ -260,8 +293,13 @@ namespace NutritionAssistant
             }
             else
             {
-                calledBy.ChangeUser(((User)cboUsers.SelectedItem));
-                SetLoggedIn((User)cboUsers.SelectedItem);
+                //SetupCboUsers();
+                //calledBy.ChangeUser(((User)cboUsers.SelectedItem));
+                //if(GetLoggedIn() != (User)cboUsers.SelectedItem)
+                //    SetLoggedIn((User)cboUsers.SelectedItem);
+                User user = users.Find(x => x.id == ((User)cboUsers.SelectedItem).id);
+                SetLoggedIn(user);
+                calledBy.ChangeUser(user);
             }
             this.Close();
         }
@@ -279,6 +317,9 @@ namespace NutritionAssistant
                 txtName.Clear();
                 txtWeight.Clear();
                 txtHeight.Clear();
+                txtAge.Clear();
+                cboSex.SelectedIndex = 0;
+                cboActivity.SelectedIndex = 0;
                 txtCalories.Clear();
                 unsaved = true;
             }
@@ -287,6 +328,9 @@ namespace NutritionAssistant
                 txtName.Text = users[i].name;
                 txtWeight.Text = users[i].weight_kg.ToString();
                 txtHeight.Text = users[i].height_m.ToString();
+                txtAge.Text = users[i].age.ToString();
+                cboSex.SelectedIndex = cboSex.FindString(users[i].sex);
+                cboActivity.SelectedIndex = cboActivity.FindString(users[i].activity);
                 txtCalories.Text = users[i].daily_cal.ToString();
                 unsaved = false;
             }
@@ -296,7 +340,7 @@ namespace NutritionAssistant
         private void cboUsers_DataSourceChanged(object sender, EventArgs e)
         {
             List<User> srcUsers = (List<User>)cboUsers.DataSource;
-            srcUsers.Add(new User(MaxID() + 1, newUserName, 0, 0, 0));
+            srcUsers.Add(new User(MaxID() + 1, newUserName, 0, 0, 0, "Male", "Lightly Active", 0));
             cboUsers.DataSource = srcUsers;
         }
 
@@ -309,8 +353,6 @@ namespace NutritionAssistant
         {
             SaveChanges();
         }
-
-        #endregion
 
         private void txtName_TextChanged(object sender, EventArgs e)
         {
@@ -336,10 +378,31 @@ namespace NutritionAssistant
             btnSave.Enabled = unsaved;
         }
 
+        private void txtAge_TextChanged(object sender, EventArgs e)
+        {
+            unsaved = true;
+            btnSave.Enabled = unsaved;
+        }
+
+        private void cboSex_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            unsaved = true;
+            btnSave.Enabled = unsaved;
+        }
+
+        private void cboActivity_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            unsaved = true;
+            btnSave.Enabled = unsaved;
+        }
+
         private void btnReset_Click(object sender, EventArgs e)
         {
             calledBy.ResetUser(currentUser);
             MessageBox.Show(currentUser.name + "'s daily food successfully reset.", "Reset", MessageBoxButtons.OK);
         }
+
+        #endregion
+
     }
 }

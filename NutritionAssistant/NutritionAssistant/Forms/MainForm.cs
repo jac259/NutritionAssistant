@@ -36,7 +36,17 @@ namespace NutritionAssistant
             InitializeComponent();
             this.Icon = NutritionAssistant.Properties.Resources.Nutrition_Assistant;
             GetCurrentUser();
+            CheckArchive();
             SetCalories();
+        }
+
+        public void CheckArchive()
+        {
+            if(Properties.Settings.Default.LastRunTime < DateTime.Today)
+            {
+                ArchiveUsers();
+                ClearResults();
+            }
         }
 
         public void GetCurrentUser()
@@ -94,28 +104,29 @@ namespace NutritionAssistant
             return UserForm.ReadUserJSON(UserForm.GetFilepath());
         }
 
-        public void ResetUsers()
+        public void ArchiveUsers()
         {
             List<User> users = GetAllUsers();
 
             for (int i = 0; i < users.Count; i++)
             {
-                User tempUser = users[i];
-                tempUser.eaten_cal = 0;
+                users[i].eaten_cal = 0;
+                if (users[i].food_eaten == null)
+                    users[i].food_eaten = new List<Food>();
 
-                if (tempUser.food_eaten == null)
-                    tempUser.food_eaten = new List<Food>();
-                else
-                    tempUser.food_eaten.Clear();
+                List<Food> tempFood = users[i].food_eaten;
+
+                if (users[i].food_eaten.Count != 0)
+                {
+                    users[i].Archive(tempFood);
+                    users[i].food_eaten = new List<Food>();
+                }
                 
-                if (tempUser.id == currentUser.id)
-                    currentUser = tempUser;
-
-                users[i] = tempUser;
+                if (users[i].id == currentUser.id)
+                    currentUser = users[i];
             }
 
             UserForm.WriteJSON(users, UserForm.GetFilepath());
-
             SetCalories();
         }
 
@@ -185,13 +196,7 @@ namespace NutritionAssistant
         {
             if (e.KeyChar == (char)Keys.Enter || e.KeyChar == (char)Keys.Return)
                 btnQuery_Click(sender, new EventArgs());
-        }
-
-        private void btnReset_Click(object sender, EventArgs e)
-        {
-            ResetUsers();
-            ClearResults();
-        }
+        }       
 
         private void btnEaten_Click(object sender, EventArgs e)
         {
@@ -217,6 +222,20 @@ namespace NutritionAssistant
             PopulateResults(customFood, false, true);
 
             flpCurrent = flpItems.Custom;
+        }
+
+        private void btnArchive_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.LastRunTime = DateTime.Today.AddDays(-1);
+            Properties.Settings.Default.Save();
+
+            CheckArchive();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.LastRunTime = DateTime.Now;
+            Properties.Settings.Default.Save();
         }
     }
 }

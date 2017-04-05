@@ -41,6 +41,7 @@
             this.btnCustom = new System.Windows.Forms.Button();
             this.btnEaten = new System.Windows.Forms.Button();
             this.btnShowCustom = new System.Windows.Forms.Button();
+            this.btnArchive = new System.Windows.Forms.Button();
             this.gboMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pboAttribution)).BeginInit();
             this.SuspendLayout();
@@ -175,11 +176,22 @@
             this.btnShowCustom.UseVisualStyleBackColor = true;
             this.btnShowCustom.Click += new System.EventHandler(this.btnShowCustom_Click);
             // 
+            // btnArchive
+            // 
+            this.btnArchive.Location = new System.Drawing.Point(180, 8);
+            this.btnArchive.Name = "btnArchive";
+            this.btnArchive.Size = new System.Drawing.Size(78, 23);
+            this.btnArchive.TabIndex = 9;
+            this.btnArchive.Text = "Archive";
+            this.btnArchive.UseVisualStyleBackColor = true;
+            this.btnArchive.Click += new System.EventHandler(this.btnArchive_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 362);
+            this.Controls.Add(this.btnArchive);
             this.Controls.Add(this.btnCustom);
             this.Controls.Add(this.btnShowCustom);
             this.Controls.Add(this.btnEaten);
@@ -192,6 +204,7 @@
             this.Controls.Add(this.btnUsers);
             this.Name = "MainForm";
             this.Text = "Nutrition Assistant";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.gboMain.ResumeLayout(false);
             this.gboMain.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pboAttribution)).EndInit();
@@ -215,5 +228,6 @@
         private System.Windows.Forms.Button btnCustom;
         private System.Windows.Forms.Button btnEaten;
         private System.Windows.Forms.Button btnShowCustom;
+        private System.Windows.Forms.Button btnArchive;
     }
 }
