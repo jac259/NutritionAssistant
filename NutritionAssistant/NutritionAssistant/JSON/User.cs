@@ -9,7 +9,7 @@ namespace NutritionAssistant.JSON
     public class User
     {
         [Newtonsoft.Json.JsonConstructor]
-        public User(int _id, string _name, double _weight, double _height, int _age, string _sex, string _activity, int _daily_cal)
+        public User(int _id, string _name, double _weight, double _height, int _age, string _sex, string _activity, int _daily_cal, bool _manual_cal, UserForm.WeightChange _wgtchg)
         {
             id = _id;
             name = _name;
@@ -21,11 +21,13 @@ namespace NutritionAssistant.JSON
             daily_cal = _daily_cal;
             eaten_cal = 0;
             logged_in = false;
+            manual_cal = _manual_cal;
+            wgtchg = _wgtchg;
             food_eaten = new List<Food>();
             archived_eaten = new Queue<List<Food>>();
         }
 
-        public User(int _id, string _name, double _weight, double _height, int _age, string _sex, string _activity)
+        public User(int _id, string _name, double _weight, double _height, int _age, string _sex, string _activity, bool _manual_cal, UserForm.WeightChange _wgtchg)
         {
             id = _id;
             name = _name;
@@ -37,11 +39,13 @@ namespace NutritionAssistant.JSON
             daily_cal = BMI();
             eaten_cal = 0;
             logged_in = false;
+            manual_cal = _manual_cal;
+            wgtchg = _wgtchg;
             food_eaten = new List<Food>();
             archived_eaten = new Queue<List<Food>>();
         }
 
-        private Dictionary<string, double> HBF = new Dictionary<string, double>() {
+        public static Dictionary<string, double> HBF = new Dictionary<string, double>() {
             { "Sedentary", 1.2 },
             { "Lightly Active", 1.375 },
             { "Moderately Active", 1.55 },
@@ -59,6 +63,8 @@ namespace NutritionAssistant.JSON
         public int daily_cal { get; set; }
         public int eaten_cal { get; set; }
         public bool logged_in { get; set; }
+        public bool manual_cal { get; set; }
+        public UserForm.WeightChange wgtchg { get; set; }
         public List<Food> food_eaten { get; set; }
         public Queue<List<Food>> archived_eaten { get; set; }
 

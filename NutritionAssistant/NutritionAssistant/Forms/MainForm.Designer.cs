@@ -42,13 +42,14 @@
             this.btnEaten = new System.Windows.Forms.Button();
             this.btnShowCustom = new System.Windows.Forms.Button();
             this.btnArchive = new System.Windows.Forms.Button();
+            this.lblSource = new System.Windows.Forms.Label();
             this.gboMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pboAttribution)).BeginInit();
             this.SuspendLayout();
             // 
             // btnQuery
             // 
-            this.btnQuery.Location = new System.Drawing.Point(175, 292);
+            this.btnQuery.Location = new System.Drawing.Point(175, 315);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(75, 23);
             this.btnQuery.TabIndex = 1;
@@ -58,7 +59,7 @@
             // 
             // txtQuery
             // 
-            this.txtQuery.Location = new System.Drawing.Point(15, 294);
+            this.txtQuery.Location = new System.Drawing.Point(15, 317);
             this.txtQuery.Name = "txtQuery";
             this.txtQuery.Size = new System.Drawing.Size(154, 20);
             this.txtQuery.TabIndex = 0;
@@ -88,7 +89,7 @@
             // lblCalories
             // 
             this.lblCalories.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lblCalories.Location = new System.Drawing.Point(15, 332);
+            this.lblCalories.Location = new System.Drawing.Point(15, 359);
             this.lblCalories.Name = "lblCalories";
             this.lblCalories.Size = new System.Drawing.Size(307, 18);
             this.lblCalories.TabIndex = 5;
@@ -100,7 +101,7 @@
             this.gboMain.Controls.Add(this.lblFoodTitle);
             this.gboMain.Controls.Add(this.lblCalTitle);
             this.gboMain.Controls.Add(this.flpResults);
-            this.gboMain.Location = new System.Drawing.Point(12, 37);
+            this.gboMain.Location = new System.Drawing.Point(12, 55);
             this.gboMain.Name = "gboMain";
             this.gboMain.Size = new System.Drawing.Size(463, 251);
             this.gboMain.TabIndex = 6;
@@ -109,7 +110,7 @@
             // lblFoodTitle
             // 
             this.lblFoodTitle.AutoSize = true;
-            this.lblFoodTitle.Location = new System.Drawing.Point(6, 15);
+            this.lblFoodTitle.Location = new System.Drawing.Point(6, 21);
             this.lblFoodTitle.Name = "lblFoodTitle";
             this.lblFoodTitle.Size = new System.Drawing.Size(27, 13);
             this.lblFoodTitle.TabIndex = 5;
@@ -119,7 +120,7 @@
             // lblCalTitle
             // 
             this.lblCalTitle.AutoSize = true;
-            this.lblCalTitle.Location = new System.Drawing.Point(384, 15);
+            this.lblCalTitle.Location = new System.Drawing.Point(384, 21);
             this.lblCalTitle.Name = "lblCalTitle";
             this.lblCalTitle.Size = new System.Drawing.Size(44, 13);
             this.lblCalTitle.TabIndex = 4;
@@ -130,7 +131,7 @@
             // 
             this.flpResults.AutoScroll = true;
             this.flpResults.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flpResults.Location = new System.Drawing.Point(6, 32);
+            this.flpResults.Location = new System.Drawing.Point(6, 38);
             this.flpResults.Name = "flpResults";
             this.flpResults.Size = new System.Drawing.Size(451, 212);
             this.flpResults.TabIndex = 3;
@@ -139,7 +140,7 @@
             // pboAttribution
             // 
             this.pboAttribution.Image = global::NutritionAssistant.Properties.Resources.nutritionix_attribution_alpha;
-            this.pboAttribution.Location = new System.Drawing.Point(328, 315);
+            this.pboAttribution.Location = new System.Drawing.Point(328, 342);
             this.pboAttribution.Name = "pboAttribution";
             this.pboAttribution.Size = new System.Drawing.Size(147, 35);
             this.pboAttribution.TabIndex = 4;
@@ -148,7 +149,7 @@
             // 
             // btnCustom
             // 
-            this.btnCustom.Location = new System.Drawing.Point(256, 292);
+            this.btnCustom.Location = new System.Drawing.Point(256, 315);
             this.btnCustom.Name = "btnCustom";
             this.btnCustom.Size = new System.Drawing.Size(75, 23);
             this.btnCustom.TabIndex = 7;
@@ -186,11 +187,22 @@
             this.btnArchive.UseVisualStyleBackColor = true;
             this.btnArchive.Click += new System.EventHandler(this.btnArchive_Click);
             // 
+            // lblSource
+            // 
+            this.lblSource.AutoSize = true;
+            this.lblSource.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSource.Location = new System.Drawing.Point(15, 39);
+            this.lblSource.Name = "lblSource";
+            this.lblSource.Size = new System.Drawing.Size(47, 13);
+            this.lblSource.TabIndex = 10;
+            this.lblSource.Text = "Source";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 362);
+            this.ClientSize = new System.Drawing.Size(484, 389);
+            this.Controls.Add(this.lblSource);
             this.Controls.Add(this.btnArchive);
             this.Controls.Add(this.btnCustom);
             this.Controls.Add(this.btnShowCustom);
@@ -229,5 +241,6 @@
         private System.Windows.Forms.Button btnEaten;
         private System.Windows.Forms.Button btnShowCustom;
         private System.Windows.Forms.Button btnArchive;
+        private System.Windows.Forms.Label lblSource;
     }
 }

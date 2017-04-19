@@ -48,7 +48,13 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.lblUser = new System.Windows.Forms.Label();
             this.btnReset = new System.Windows.Forms.Button();
+            this.gboCal = new System.Windows.Forms.GroupBox();
+            this.rdoCalManual = new System.Windows.Forms.RadioButton();
+            this.rdoCalAuto = new System.Windows.Forms.RadioButton();
+            this.lblWeightChange = new System.Windows.Forms.Label();
+            this.cboWeightChange = new System.Windows.Forms.ComboBox();
             this.gboUserInfo.SuspendLayout();
+            this.gboCal.SuspendLayout();
             this.SuspendLayout();
             // 
             // cboUsers
@@ -88,7 +94,7 @@
             // 
             // txtCalories
             // 
-            this.txtCalories.Location = new System.Drawing.Point(125, 181);
+            this.txtCalories.Location = new System.Drawing.Point(125, 77);
             this.txtCalories.Name = "txtCalories";
             this.txtCalories.Size = new System.Drawing.Size(112, 20);
             this.txtCalories.TabIndex = 7;
@@ -102,17 +108,15 @@
             this.gboUserInfo.Controls.Add(this.lblActivity);
             this.gboUserInfo.Controls.Add(this.txtAge);
             this.gboUserInfo.Controls.Add(this.lblAge);
-            this.gboUserInfo.Controls.Add(this.lblCalories);
             this.gboUserInfo.Controls.Add(this.lblHeight);
             this.gboUserInfo.Controls.Add(this.lblWeight);
             this.gboUserInfo.Controls.Add(this.lblName);
-            this.gboUserInfo.Controls.Add(this.txtCalories);
             this.gboUserInfo.Controls.Add(this.txtHeight);
             this.gboUserInfo.Controls.Add(this.txtWeight);
             this.gboUserInfo.Controls.Add(this.txtName);
             this.gboUserInfo.Location = new System.Drawing.Point(13, 45);
             this.gboUserInfo.Name = "gboUserInfo";
-            this.gboUserInfo.Size = new System.Drawing.Size(259, 215);
+            this.gboUserInfo.Size = new System.Drawing.Size(259, 186);
             this.gboUserInfo.TabIndex = 1;
             this.gboUserInfo.TabStop = false;
             this.gboUserInfo.Text = "User Info";
@@ -184,7 +188,7 @@
             // lblCalories
             // 
             this.lblCalories.AutoSize = true;
-            this.lblCalories.Location = new System.Drawing.Point(18, 184);
+            this.lblCalories.Location = new System.Drawing.Point(19, 80);
             this.lblCalories.Name = "lblCalories";
             this.lblCalories.Size = new System.Drawing.Size(85, 13);
             this.lblCalories.TabIndex = 8;
@@ -220,7 +224,7 @@
             // 
             // btnUpdate
             // 
-            this.btnUpdate.Location = new System.Drawing.Point(167, 268);
+            this.btnUpdate.Location = new System.Drawing.Point(167, 353);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(83, 23);
             this.btnUpdate.TabIndex = 9;
@@ -230,7 +234,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(34, 268);
+            this.btnSave.Location = new System.Drawing.Point(34, 353);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(83, 23);
             this.btnSave.TabIndex = 8;
@@ -257,21 +261,87 @@
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
+            // gboCal
+            // 
+            this.gboCal.Controls.Add(this.cboWeightChange);
+            this.gboCal.Controls.Add(this.lblWeightChange);
+            this.gboCal.Controls.Add(this.rdoCalAuto);
+            this.gboCal.Controls.Add(this.rdoCalManual);
+            this.gboCal.Controls.Add(this.txtCalories);
+            this.gboCal.Controls.Add(this.lblCalories);
+            this.gboCal.Location = new System.Drawing.Point(13, 238);
+            this.gboCal.Name = "gboCal";
+            this.gboCal.Size = new System.Drawing.Size(259, 109);
+            this.gboCal.TabIndex = 12;
+            this.gboCal.TabStop = false;
+            this.gboCal.Text = "Daily Calories";
+            // 
+            // rdoCalManual
+            // 
+            this.rdoCalManual.AutoSize = true;
+            this.rdoCalManual.Checked = true;
+            this.rdoCalManual.Location = new System.Drawing.Point(21, 22);
+            this.rdoCalManual.Name = "rdoCalManual";
+            this.rdoCalManual.Size = new System.Drawing.Size(60, 17);
+            this.rdoCalManual.TabIndex = 9;
+            this.rdoCalManual.TabStop = true;
+            this.rdoCalManual.Text = "Manual";
+            this.rdoCalManual.UseVisualStyleBackColor = true;
+            this.rdoCalManual.CheckedChanged += new System.EventHandler(this.rdoCalManual_CheckedChanged);
+            // 
+            // rdoCalAuto
+            // 
+            this.rdoCalAuto.AutoSize = true;
+            this.rdoCalAuto.Location = new System.Drawing.Point(125, 22);
+            this.rdoCalAuto.Name = "rdoCalAuto";
+            this.rdoCalAuto.Size = new System.Drawing.Size(72, 17);
+            this.rdoCalAuto.TabIndex = 10;
+            this.rdoCalAuto.Text = "Automatic";
+            this.rdoCalAuto.UseVisualStyleBackColor = true;
+            this.rdoCalAuto.CheckedChanged += new System.EventHandler(this.rdoCalAuto_CheckedChanged);
+            // 
+            // lblWeightChange
+            // 
+            this.lblWeightChange.AutoSize = true;
+            this.lblWeightChange.Enabled = false;
+            this.lblWeightChange.Location = new System.Drawing.Point(18, 51);
+            this.lblWeightChange.Name = "lblWeightChange";
+            this.lblWeightChange.Size = new System.Drawing.Size(81, 13);
+            this.lblWeightChange.TabIndex = 11;
+            this.lblWeightChange.Text = "Weight Change";
+            // 
+            // cboWeightChange
+            // 
+            this.cboWeightChange.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboWeightChange.Enabled = false;
+            this.cboWeightChange.FormattingEnabled = true;
+            this.cboWeightChange.Items.AddRange(new object[] {
+            "Male",
+            "Female"});
+            this.cboWeightChange.Location = new System.Drawing.Point(125, 48);
+            this.cboWeightChange.Name = "cboWeightChange";
+            this.cboWeightChange.Size = new System.Drawing.Size(112, 21);
+            this.cboWeightChange.TabIndex = 15;
+            this.cboWeightChange.SelectedIndexChanged += new System.EventHandler(this.cboWeightChange_SelectedIndexChanged);
+            // 
             // UserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 301);
+            this.ClientSize = new System.Drawing.Size(284, 385);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.lblUser);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.gboUserInfo);
             this.Controls.Add(this.cboUsers);
+            this.Controls.Add(this.gboCal);
             this.Name = "UserForm";
             this.Text = "User Editor";
             this.gboUserInfo.ResumeLayout(false);
             this.gboUserInfo.PerformLayout();
+            this.gboCal.ResumeLayout(false);
+            this.gboCal.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -299,5 +369,10 @@
         private System.Windows.Forms.ComboBox cboActivity;
         private System.Windows.Forms.ComboBox cboSex;
         private System.Windows.Forms.Label lblSex;
+        private System.Windows.Forms.GroupBox gboCal;
+        private System.Windows.Forms.RadioButton rdoCalAuto;
+        private System.Windows.Forms.RadioButton rdoCalManual;
+        private System.Windows.Forms.ComboBox cboWeightChange;
+        private System.Windows.Forms.Label lblWeightChange;
     }
 }

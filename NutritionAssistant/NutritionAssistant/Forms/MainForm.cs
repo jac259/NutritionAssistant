@@ -21,7 +21,7 @@ namespace NutritionAssistant
 {
     public partial class MainForm : Form
     {
-        public enum flpItems { Custom, Eaten, Search, None };
+        public enum flpItems { Custom, Eaten, Search, NoResults, None };
         public flpItems flpCurrent = flpItems.None;
 
         public User currentUser;
@@ -38,6 +38,7 @@ namespace NutritionAssistant
             GetCurrentUser();
             CheckArchive();
             SetCalories();
+            UpdateSourceLabel();
         }
 
         public void CheckArchive()
@@ -157,6 +158,36 @@ namespace NutritionAssistant
             return true;
         }
 
+        private void UpdateSourceLabel()
+        {
+            switch (flpCurrent)
+            {
+                case flpItems.Custom:
+                    lblSource.Text = "Created foods";
+                    break;
+                case flpItems.Eaten:
+                    lblSource.Text = "Today's eaten food";
+                    break;
+                case flpItems.Search:
+                    lblSource.Text = "Query results";
+                    break;
+                case flpItems.NoResults:
+                    lblSource.Text = "No results";
+                    break;
+                case flpItems.None:
+                    lblSource.Text = "";
+                    break;
+                default:
+                    lblSource.Text = "";
+                    break;
+            }
+        }
+
+        private void UpdateSourceLabel(string text)
+        {
+            lblSource.Text = text;
+        }
+
         private async void btnQuery_Click(object sender, System.EventArgs e)
         {
             string queryString = txtQuery.Text;
@@ -174,11 +205,17 @@ namespace NutritionAssistant
             Results ro = JsonConvert.DeserializeObject<Results>(message);
 
             if (ro.total == 0)
-                MessageBox.Show("No results found for \"" + queryString + "\"", "No results", MessageBoxButtons.OK);
+            {
+                flpCurrent = flpItems.NoResults;
+                //MessageBox.Show("No results found for \"" + queryString + "\"", "No results", MessageBoxButtons.OK);
+                UpdateSourceLabel("No results for \"" + queryString + "\"");
+            }
             else
+            {
+                flpCurrent = flpItems.Search;
+                UpdateSourceLabel("Query results for \"" + queryString + "\"");
                 PopulateResults(ro.GetFoods(), false, false);
-
-            flpCurrent = flpItems.Search;
+            }            
         }
 
         private void btnUsers_click(object sender, EventArgs e)
@@ -208,6 +245,7 @@ namespace NutritionAssistant
             txtQuery.Clear();
 
             flpCurrent = flpItems.Eaten;
+            UpdateSourceLabel();
         }
 
         private void btnCustom_Click(object sender, EventArgs e)
@@ -222,6 +260,7 @@ namespace NutritionAssistant
             PopulateResults(customFood, false, true);
 
             flpCurrent = flpItems.Custom;
+            UpdateSourceLabel();
         }
 
         private void btnArchive_Click(object sender, EventArgs e)

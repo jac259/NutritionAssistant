@@ -17,6 +17,8 @@ namespace NutritionAssistant
 {
     public partial class UserForm : Form
     {
+        public enum WeightChange {Lose=0, Gain=1, Maintain=2}
+
         MainForm calledBy;
 
         const string filename = "UserData.json";
@@ -45,6 +47,7 @@ namespace NutritionAssistant
         {
             GetUsers();
             currentUser = GetLoggedIn();
+            SetupCboWeightChange();
             SetupCboUsers();
         }
 
@@ -84,16 +87,18 @@ namespace NutritionAssistant
         
         User GetLoggedIn()
         {
-            int index = users.FindIndex(x => x.logged_in);
-            if (index == -1)
-            {
-                //GetUsers(GetFilepath())[0].SetLogin(true)
-                users[0] = users[0].SetLogin(true);
-                return users[0];
-            }
-            else
-                return users[index];
-            //return users.Find(x => x.logged_in == true);
+            //int index = users.FindIndex(x => x.logged_in == true);
+            //if (index == -1)
+            //{
+            //    //GetUsers(GetFilepath())[0].SetLogin(true)
+            //    users[0] = users[0].SetLogin(true);
+            //    return users[0];
+            //}
+            //else
+            //    return users[index];
+            ////return users.Find(x => x.logged_in == true);
+            User user = users.Find(x => x.logged_in);
+            return user == null ? users[0].SetLogin(true) : user;
         }
 
         public static User GetLoggedIn(List<User> _users)
@@ -102,16 +107,20 @@ namespace NutritionAssistant
             return user == null ? _users[0].SetLogin(true) : user;
         }
 
-        void SetLoggedIn(User newLogin)
+        bool SetLoggedIn(User newLogin)
         {
             int i = users.FindIndex(x => x.logged_in);
+            //if (i == users.FindIndex(x => x.id == newLogin.id))
+            //    return false;
+            
             if(i != -1)
-                users[users.FindIndex(x => x.logged_in)].logged_in = false;
+                users[i].logged_in = false;
 
             newLogin.logged_in = true;
             users[users.FindIndex(x => x.id == newLogin.id)] = newLogin;
 
             WriteJSON();
+            return true;
         }
 
         void SetupCboUsers()
@@ -120,7 +129,15 @@ namespace NutritionAssistant
             cboUsers.DataSource = users;
             cboUsers_DataSourceChanged(cboUsers, new EventArgs());
             cboUsers.DisplayMember = "name";
-            cboUsers.SelectedItem = currentUser;
+            //cboUsers.SelectedIndex = users.IndexOf(currentUser);
+            cboUsers.SelectedIndex = users.FindIndex(x => x.logged_in);
+        }
+
+        void SetupCboWeightChange()
+        {
+            String[] WeightChange = { "Lose weight", "Gain weight", "Maintain weight" };
+            cboWeightChange.DataSource = WeightChange;
+            cboWeightChange.SelectedIndex = 0;
         }
 
         void CreateUser(User newUser)
@@ -252,18 +269,18 @@ namespace NutritionAssistant
                 CreateUser(calBool ? 
                     new User(MaxID() + 1, txtName.Text, double.Parse(txtWeight.Text),
                     double.Parse(txtHeight.Text), int.Parse(txtAge.Text), cboSex.SelectedItem.ToString(), 
-                    cboActivity.SelectedItem.ToString(), cal) :
+                    cboActivity.SelectedItem.ToString(), cal, rdoCalManual.Checked, (WeightChange)cboWeightChange.SelectedIndex) :
                     new User(MaxID() + 1, txtName.Text, double.Parse(txtWeight.Text),
                     double.Parse(txtHeight.Text), int.Parse(txtAge.Text), cboSex.SelectedItem.ToString(),
-                    cboActivity.SelectedItem.ToString()));
+                    cboActivity.SelectedItem.ToString(), rdoCalManual.Checked, (WeightChange)cboWeightChange.SelectedIndex));
             else
                 EditUser(users[i], calBool ?
                     new User(users[i].id, txtName.Text, double.Parse(txtWeight.Text),
                     double.Parse(txtHeight.Text), int.Parse(txtAge.Text), cboSex.SelectedItem.ToString(),
-                    cboActivity.SelectedItem.ToString(), cal) :
+                    cboActivity.SelectedItem.ToString(), cal, rdoCalManual.Checked, (WeightChange)cboWeightChange.SelectedIndex) :
                     new User(users[i].id, txtName.Text, double.Parse(txtWeight.Text),
                     double.Parse(txtHeight.Text), int.Parse(txtAge.Text), cboSex.SelectedItem.ToString(),
-                    cboActivity.SelectedItem.ToString()));
+                    cboActivity.SelectedItem.ToString(), rdoCalManual.Checked, (WeightChange)cboWeightChange.SelectedIndex));
 
             //cboUsers.DataSource = users;
             SetupCboUsers();
@@ -284,9 +301,10 @@ namespace NutritionAssistant
                         if (!DataValidation())
                             return;
                         SaveChanges();
-                        User user = users.Find(x => x.id == ((User)cboUsers.SelectedItem).id);
-                        SetLoggedIn(user);
-                        calledBy.ChangeUser(user);
+                        //User user = users.Find(x => x.id == ((User)cboUsers.SelectedItem).id);
+                        int i = users.FindIndex(x => x.id == ((User)cboUsers.SelectedItem).id);
+                        SetLoggedIn(users[i]);
+                        calledBy.ChangeUser(users[i]);
                         break;
                     case DialogResult.Cancel:
                         return;
@@ -296,11 +314,58 @@ namespace NutritionAssistant
             }
             else
             {
-                User user = users.Find(x => x.id == ((User)cboUsers.SelectedItem).id);
-                SetLoggedIn(user);
-                calledBy.ChangeUser(user);
+                //User user = users.Find(x => x.id == ((User)cboUsers.SelectedItem).id);
+                int i = users.FindIndex(x => x.id == ((User)cboUsers.SelectedItem).id);
+                SetLoggedIn(users[i]);
+                calledBy.ChangeUser(users[i]);
             }
             this.Close();
+        }
+
+        void AutoCalories()
+        {
+            string sex = cboSex.SelectedItem as string;
+            string activity = cboActivity.SelectedItem as string;
+            double weight_kg, height_m, modifier = 0.2;
+            int age;
+
+            if (string.IsNullOrWhiteSpace(sex))
+                sex = currentUser.sex;
+            if (string.IsNullOrWhiteSpace(activity))
+                activity = currentUser.activity;
+            if (!double.TryParse(txtWeight.Text, out weight_kg))
+                weight_kg = currentUser.weight_kg;
+            if (!double.TryParse(txtHeight.Text, out height_m))
+                height_m = currentUser.height_m;
+            if (!int.TryParse(txtAge.Text, out age))
+                age = currentUser.age;
+
+            WeightChange wgtChg = (WeightChange)cboWeightChange.SelectedIndex;
+            switch (wgtChg)
+            {
+                case WeightChange.Lose:
+                    modifier = 1 - modifier;
+                    break;
+                case WeightChange.Maintain:
+                    modifier = 1;
+                    break;
+                case WeightChange.Gain:
+                    modifier = 1 + modifier;
+                    break;
+            }
+
+            double BMR = -1;
+            if (sex.ToLower() == "male")
+                BMR = (66 + 13.7 * weight_kg + 500 * height_m - 6.8 * age);
+            else if (sex.ToLower() == "female")
+                BMR = (655 + 9.6 * weight_kg + 180 * height_m - 4.7 * age);
+            else
+            {
+                txtCalories.Text = "2000";
+                return;
+            }
+
+            txtCalories.Text = ((int)(BMR * User.HBF[activity] * modifier)).ToString();
         }
 
 
@@ -318,8 +383,10 @@ namespace NutritionAssistant
                 txtWeight.Clear();
                 txtHeight.Clear();
                 txtAge.Clear();
+                rdoCalManual.Checked = true;
                 cboSex.SelectedIndex = 0;
-                cboActivity.SelectedIndex = 0;
+                cboActivity.SelectedIndex = 0;                
+                cboWeightChange.SelectedIndex = 0;
                 txtCalories.Clear();
                 unsaved = true;
             }
@@ -329,8 +396,13 @@ namespace NutritionAssistant
                 txtWeight.Text = users[i].weight_kg.ToString();
                 txtHeight.Text = users[i].height_m.ToString();
                 txtAge.Text = users[i].age.ToString();
+                if (users[i].manual_cal == true)
+                    rdoCalManual.Checked = true;
+                else if(users[i].manual_cal == false)
+                    rdoCalAuto.Checked = true;
                 cboSex.SelectedIndex = cboSex.FindString(users[i].sex);
                 cboActivity.SelectedIndex = cboActivity.FindString(users[i].activity);
+                cboWeightChange.SelectedIndex = (int)users[i].wgtchg;
                 txtCalories.Text = users[i].daily_cal.ToString();
                 unsaved = false;
             }
@@ -340,7 +412,7 @@ namespace NutritionAssistant
         private void cboUsers_DataSourceChanged(object sender, EventArgs e)
         {
             List<User> srcUsers = (List<User>)cboUsers.DataSource;
-            srcUsers.Add(new User(MaxID() + 1, newUserName, 0, 0, 0, "Male", "Lightly Active", 0));
+            srcUsers.Add(new User(MaxID() + 1, newUserName, 0, 0, 0, "Male", "Lightly Active", 0, false, 0));
             cboUsers.DataSource = srcUsers;
         }
 
@@ -399,10 +471,52 @@ namespace NutritionAssistant
         private void btnReset_Click(object sender, EventArgs e)
         {
             calledBy.ResetUser(currentUser);
+            users[users.FindIndex(x => x.id == currentUser.id)].food_eaten.Clear();
+            currentUser.food_eaten.Clear();
             MessageBox.Show(currentUser.name + "'s daily food successfully reset.", "Reset", MessageBoxButtons.OK);
         }
 
-        #endregion
+        private void rdoCalAuto_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            if (rb != null && rb.Checked)
+            {
+                txtCalories.Enabled = false;
+                lblCalories.Enabled = false;
+                cboWeightChange.Enabled = true;
+                lblWeightChange.Enabled = true;
+                AutoCalories();
+                unsaved = true;
+                btnSave.Enabled = unsaved;
+            }
+        }
 
+        private void rdoCalManual_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            if (rb != null && rb.Checked)
+            {
+                txtCalories.Enabled = true;
+                lblCalories.Enabled = true;
+                cboWeightChange.Enabled = false;
+                lblWeightChange.Enabled = false;
+                unsaved = true;
+                btnSave.Enabled = unsaved;
+            }
+        }
+
+        private void cboWeightChange_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox cbo = sender as ComboBox;
+            if (cbo != null)
+            {
+                WeightChange wgtchg = (WeightChange)cboWeightChange.SelectedIndex;
+                AutoCalories();
+                unsaved = true;
+                btnSave.Enabled = unsaved;
+            }
+        }
+
+        #endregion
     }
 }
