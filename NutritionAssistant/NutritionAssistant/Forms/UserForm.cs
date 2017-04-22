@@ -87,24 +87,35 @@ namespace NutritionAssistant
         
         User GetLoggedIn()
         {
-            //int index = users.FindIndex(x => x.logged_in == true);
-            //if (index == -1)
-            //{
-            //    //GetUsers(GetFilepath())[0].SetLogin(true)
-            //    users[0] = users[0].SetLogin(true);
-            //    return users[0];
-            //}
-            //else
-            //    return users[index];
-            ////return users.Find(x => x.logged_in == true);
-            User user = users.Find(x => x.logged_in);
-            return user == null ? users[0].SetLogin(true) : user;
+            int index = users.FindIndex(x => x.logged_in == true);
+            if (index == -1)
+            {
+                //GetUsers(GetFilepath())[0].SetLogin(true)
+                users[0] = users[0].SetLogin(true);
+                currentUser = users[0];
+                return users[0];
+            }
+            else
+                return users[index];
+
+            //User user = users.Find(x => x.logged_in);
+            //return user == null ? users[0].SetLogin(true) : user;
         }
 
         public static User GetLoggedIn(List<User> _users)
         {
-            User user = _users.Find(x => x.logged_in);
-            return user == null ? _users[0].SetLogin(true) : user;
+            int index = _users.FindIndex(x => x.logged_in == true);
+            if (index == -1)
+            {
+                //GetUsers(GetFilepath())[0].SetLogin(true)
+                _users[0] = _users[0].SetLogin(true);
+                //currentUser = users[0];
+                return _users[0];
+            }
+            else
+                return _users[index];
+            //User user = _users.Find(x => x.logged_in);
+            //return user == null ? _users[0].SetLogin(true) : user;
         }
 
         bool SetLoggedIn(User newLogin)
@@ -151,6 +162,8 @@ namespace NutritionAssistant
         void DeleteUser(User delUser)
         {
             users.Remove(users.Find(x => x.id == delUser.id));
+            users[0] = users[0].SetLogin(true);
+            currentUser = users[0];
             WriteJSON();
             SetupCboUsers();
             //GetUsers();
@@ -257,6 +270,22 @@ namespace NutritionAssistant
 
         }
 
+        bool CalAutoValidate()
+        {
+            double tempDbl; int tempInt; // ignore these
+            bool valid = false;
+
+            if ((string.IsNullOrWhiteSpace(txtWeight.Text) || string.IsNullOrWhiteSpace(txtHeight.Text) || 
+                string.IsNullOrWhiteSpace(txtAge.Text)))
+                valid = false;
+            else if (double.TryParse(txtWeight.Text, out tempDbl) && double.TryParse(txtHeight.Text, out tempDbl) &&
+                    int.TryParse(txtAge.Text, out tempInt))
+                valid = true;
+
+            return valid;
+
+        }
+
         void SaveChanges()
         {
             if (!DataValidation())
@@ -324,6 +353,9 @@ namespace NutritionAssistant
 
         void AutoCalories()
         {
+            if (rdoCalManual.Checked || !CalAutoValidate())
+                return;
+
             string sex = cboSex.SelectedItem as string;
             string activity = cboActivity.SelectedItem as string;
             double weight_kg, height_m, modifier = 0.2;
@@ -389,6 +421,7 @@ namespace NutritionAssistant
                 cboWeightChange.SelectedIndex = 0;
                 txtCalories.Clear();
                 unsaved = true;
+                btnDelete.Enabled = false;
             }
             else
             {
@@ -405,6 +438,7 @@ namespace NutritionAssistant
                 cboWeightChange.SelectedIndex = (int)users[i].wgtchg;
                 txtCalories.Text = users[i].daily_cal.ToString();
                 unsaved = false;
+                btnDelete.Enabled = true;
             }
             btnSave.Enabled = unsaved;
         }
@@ -436,6 +470,7 @@ namespace NutritionAssistant
         {
             unsaved = true;
             btnSave.Enabled = unsaved;
+            AutoCalories();
         }
 
         private void txtCalories_TextChanged(object sender, EventArgs e)
@@ -448,32 +483,41 @@ namespace NutritionAssistant
         {
             unsaved = true;
             btnSave.Enabled = unsaved;
+            AutoCalories();
         }
 
         private void txtAge_TextChanged(object sender, EventArgs e)
         {
             unsaved = true;
             btnSave.Enabled = unsaved;
+            AutoCalories();
         }
 
         private void cboSex_SelectedIndexChanged(object sender, EventArgs e)
         {
             unsaved = true;
             btnSave.Enabled = unsaved;
+            AutoCalories();
         }
 
         private void cboActivity_SelectedIndexChanged(object sender, EventArgs e)
         {
             unsaved = true;
             btnSave.Enabled = unsaved;
+            AutoCalories();
         }
 
-        private void btnReset_Click(object sender, EventArgs e)
+        private void btnDelete_Click(object sender, EventArgs e)
         {
-            calledBy.ResetUser(currentUser);
-            users[users.FindIndex(x => x.id == currentUser.id)].food_eaten.Clear();
-            currentUser.food_eaten.Clear();
-            MessageBox.Show(currentUser.name + "'s daily food successfully reset.", "Reset", MessageBoxButtons.OK);
+            //calledBy.ResetUser(currentUser);
+            //users[users.FindIndex(x => x.id == currentUser.id)].food_eaten.Clear();
+            //currentUser.food_eaten.Clear();
+            //MessageBox.Show(currentUser.name + "'s daily food successfully reset.", "Reset", MessageBoxButtons.OK);
+            DialogResult result = MessageBox.Show("This user will be permanently deleted. Continue?", "Delete User", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                DeleteUser(users[cboUsers.SelectedIndex]);
+            }
         }
 
         private void rdoCalAuto_CheckedChanged(object sender, EventArgs e)

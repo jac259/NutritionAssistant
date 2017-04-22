@@ -47,7 +47,7 @@
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.lblUser = new System.Windows.Forms.Label();
-            this.btnReset = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
             this.gboCal = new System.Windows.Forms.GroupBox();
             this.rdoCalManual = new System.Windows.Forms.RadioButton();
             this.rdoCalAuto = new System.Windows.Forms.RadioButton();
@@ -251,15 +251,15 @@
             this.lblUser.TabIndex = 11;
             this.lblUser.Text = "User:";
             // 
-            // btnReset
+            // btnDelete
             // 
-            this.btnReset.Location = new System.Drawing.Point(13, 10);
-            this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(83, 23);
-            this.btnReset.TabIndex = 1;
-            this.btnReset.Text = "Reset Day";
-            this.btnReset.UseVisualStyleBackColor = true;
-            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            this.btnDelete.Location = new System.Drawing.Point(13, 10);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(83, 23);
+            this.btnDelete.TabIndex = 1;
+            this.btnDelete.Text = "Delete User";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // gboCal
             // 
@@ -329,7 +329,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 385);
-            this.Controls.Add(this.btnReset);
+            this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.lblUser);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnUpdate);
@@ -362,7 +362,7 @@
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Label lblUser;
-        private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Label lblActivity;
         private System.Windows.Forms.TextBox txtAge;
         private System.Windows.Forms.Label lblAge;
