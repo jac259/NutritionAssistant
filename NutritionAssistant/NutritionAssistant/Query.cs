@@ -13,8 +13,8 @@ namespace NutritionAssistant
 {
     class Query
     {
-        const string app_Id = "2e481270";
-        const string app_Key = "5f7f23a4d1e548f572bf781adb590000";
+        public static string app_Id = "2e481270";
+        public static string app_Key = "5f7f23a4d1e548f572bf781adb590000";
 
         static List<string> getFieldNames()
         {
@@ -38,6 +38,35 @@ namespace NutritionAssistant
                     appId = app_Id,
                     appKey = app_Key,
                     query = queryString,
+                    fields = getFieldNames().ToArray()
+                };
+
+                var dataContent = JsonConvert.SerializeObject(data);
+                var buffer = System.Text.Encoding.UTF8.GetBytes(dataContent);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var response = await client.PostAsync("https://api.nutritionix.com/v1_1/search", byteContent);
+
+                var responseString = await response.Content.ReadAsStringAsync();
+                return responseString;
+            }
+        }
+
+        public static async Task<string> query(Filters qf)
+        {
+            using (var client = new HttpClient())
+            {
+                Random r = new Random();
+
+                object data = new
+                {
+                    appId = app_Id,
+                    appKey = app_Key,
+                    //query = "test",
+                    limit = 50,
+                    offset = r.Next(50),
+                    filters = qf,
                     fields = getFieldNames().ToArray()
                 };
 

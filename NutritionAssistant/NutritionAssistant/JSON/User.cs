@@ -112,5 +112,45 @@ namespace NutritionAssistant.JSON
             }
             return cal;
         }
+
+        public int SugarLeft()
+        {
+            int max = sex.ToLower() == "female" ? 25 : 36; // 25 grams for women, 36 grams for men per day
+            int eaten = 0;
+            int temp = 0;
+            for (int i = 0; i < food_eaten.Count(); i++)
+                eaten += (int.TryParse(food_eaten[i].nf_sugars, out temp) ? temp : 0);
+            return Math.Max(max - eaten, 0);
+        }
+
+        public int CholesterolLeft()
+        {
+            int max = 300; // 300 mg per day
+            int eaten = 0;
+            int temp = 0;
+            for (int i = 0; i < food_eaten.Count(); i++)
+                eaten += (int.TryParse(food_eaten[i].nf_cholesterol, out temp) ? temp : 0);
+            return Math.Max(max - eaten, 0);
+        }
+
+        public int SodiumLeft()
+        {
+            int max = 2400; // 1500 mg per day
+            int eaten = 0;
+            int temp = 0;
+            for (int i = 0; i < food_eaten.Count(); i++)
+                eaten += (int.TryParse(food_eaten[i].nf_sodium, out temp) ? temp : 0);
+            return Math.Max(max - eaten, 0);
+        }
+
+        public int TotalFatLeft()
+        {
+            int max = 65; // 65 g per day
+            int eaten = 0;
+            int temp = 0;
+            for (int i = 0; i < food_eaten.Count(); i++)
+                eaten += (int.TryParse(food_eaten[i].nf_sodium, out temp) ? temp : 0);
+            return Math.Max(max - eaten, 0);
+        }
     }
 }

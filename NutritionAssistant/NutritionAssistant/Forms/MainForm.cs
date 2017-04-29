@@ -72,6 +72,7 @@ namespace NutritionAssistant
         {
             flpResults.Controls.Clear();
             txtQuery.Clear();
+            lblSource.Text = "";
 
             lblCalTitle.Visible = false;
             lblFoodTitle.Visible = false;
@@ -275,6 +276,53 @@ namespace NutritionAssistant
         {
             Properties.Settings.Default.LastRunTime = DateTime.Now;
             Properties.Settings.Default.Save();
+        }
+
+        private async void btnSuggest_Click(object sender, EventArgs e)
+        {
+            //Filters f = new Filters(500, 100, 100, 100, 500);
+            Filters f = new Filters(currentUser.CalRemain(), currentUser.SugarLeft(), currentUser.SodiumLeft(), currentUser.TotalFatLeft(), currentUser.CholesterolLeft());
+            Filters f2 = new Filters(currentUser.CalRemain() / 2, currentUser.SugarLeft(), currentUser.SodiumLeft(), currentUser.TotalFatLeft(), currentUser.CholesterolLeft());
+            Filters f3 = new Filters(currentUser.CalRemain() / 3, currentUser.SugarLeft(), currentUser.SodiumLeft(), currentUser.TotalFatLeft(), currentUser.CholesterolLeft());
+
+            ClearResults();
+
+            string message = await Query.query(f);
+            string message2 = await Query.query(f2);
+            string message3 = await Query.query(f3);
+
+            Results ro = JsonConvert.DeserializeObject<Results>(message);
+            Results ro2 = JsonConvert.DeserializeObject<Results>(message2);
+            Results ro3 = JsonConvert.DeserializeObject<Results>(message3);
+
+            if (ro.total + ro2.total + ro3.total == 0)
+            {
+                flpCurrent = flpItems.NoResults;
+                UpdateSourceLabel("No suggestions for foods");
+            }
+            else
+            {
+                flpCurrent = flpItems.Search;
+                UpdateSourceLabel("Food suggestions");
+
+                List<Food> randomFoods = new List<Food>();
+                List<Food> allFoods = (ro.GetFoods().Union(ro2.GetFoods()).ToList()).Union(ro3.GetFoods()).ToList();
+
+                int times = Math.Min(allFoods.Count(), 10);
+                Random r = new Random();
+                List<int> usedNums = new List<int>();
+
+                for (int i = 0; i < times; i++)
+                {
+                    int rand = r.Next(allFoods.Count());
+                    while (usedNums.Contains(rand))
+                        rand = r.Next(allFoods.Count());
+                    usedNums.Add(rand);
+
+                    randomFoods.Add(allFoods[rand]);
+                }
+                PopulateResults(randomFoods, false, false);
+            }
         }
     }
 }

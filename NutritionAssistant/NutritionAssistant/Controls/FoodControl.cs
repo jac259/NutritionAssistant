@@ -47,7 +47,8 @@ namespace NutritionAssistant.Controls
 
             lblName.Text = _food.item_name + ((_food.servings != 1) ? " (" + _food.servings.ToString() + ")" : "");
             lblInfo.Text = _food.brand_name + ", " + (string.IsNullOrWhiteSpace(txt) ? "1 serving" : txt);
-            lblCalories.Text = ((int)(double.Parse(_food.nf_calories) * (_food.servings != 0 ? _food.servings : 1.0))).ToString();
+            lblCalories.Text = string.IsNullOrWhiteSpace(_food.nf_calories) ? "0" :
+                ((int)(double.Parse(_food.nf_calories) * (_food.servings != 0 ? _food.servings : 1.0))).ToString();
         }
 
         private void ShowFoodForm()

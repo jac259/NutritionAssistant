@@ -43,6 +43,7 @@
             this.btnShowCustom = new System.Windows.Forms.Button();
             this.btnArchive = new System.Windows.Forms.Button();
             this.lblSource = new System.Windows.Forms.Label();
+            this.btnSuggest = new System.Windows.Forms.Button();
             this.gboMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pboAttribution)).BeginInit();
             this.SuspendLayout();
@@ -70,7 +71,7 @@
             this.btnUsers.Location = new System.Drawing.Point(392, 8);
             this.btnUsers.Name = "btnUsers";
             this.btnUsers.Size = new System.Drawing.Size(83, 23);
-            this.btnUsers.TabIndex = 4;
+            this.btnUsers.TabIndex = 6;
             this.btnUsers.Text = "Change User";
             this.btnUsers.UseVisualStyleBackColor = true;
             this.btnUsers.Click += new System.EventHandler(this.btnUsers_click);
@@ -152,7 +153,7 @@
             this.btnCustom.Location = new System.Drawing.Point(256, 315);
             this.btnCustom.Name = "btnCustom";
             this.btnCustom.Size = new System.Drawing.Size(75, 23);
-            this.btnCustom.TabIndex = 7;
+            this.btnCustom.TabIndex = 2;
             this.btnCustom.Text = "Create Food";
             this.btnCustom.UseVisualStyleBackColor = true;
             this.btnCustom.Click += new System.EventHandler(this.btnCustom_Click);
@@ -162,7 +163,7 @@
             this.btnEaten.Location = new System.Drawing.Point(15, 8);
             this.btnEaten.Name = "btnEaten";
             this.btnEaten.Size = new System.Drawing.Size(75, 23);
-            this.btnEaten.TabIndex = 3;
+            this.btnEaten.TabIndex = 4;
             this.btnEaten.Text = "View Eaten";
             this.btnEaten.UseVisualStyleBackColor = true;
             this.btnEaten.Click += new System.EventHandler(this.btnEaten_Click);
@@ -172,19 +173,21 @@
             this.btnShowCustom.Location = new System.Drawing.Point(96, 8);
             this.btnShowCustom.Name = "btnShowCustom";
             this.btnShowCustom.Size = new System.Drawing.Size(78, 23);
-            this.btnShowCustom.TabIndex = 8;
+            this.btnShowCustom.TabIndex = 5;
             this.btnShowCustom.Text = "View Created";
             this.btnShowCustom.UseVisualStyleBackColor = true;
             this.btnShowCustom.Click += new System.EventHandler(this.btnShowCustom_Click);
             // 
             // btnArchive
             // 
+            this.btnArchive.Enabled = false;
             this.btnArchive.Location = new System.Drawing.Point(180, 8);
             this.btnArchive.Name = "btnArchive";
             this.btnArchive.Size = new System.Drawing.Size(78, 23);
             this.btnArchive.TabIndex = 9;
             this.btnArchive.Text = "Archive";
             this.btnArchive.UseVisualStyleBackColor = true;
+            this.btnArchive.Visible = false;
             this.btnArchive.Click += new System.EventHandler(this.btnArchive_Click);
             // 
             // lblSource
@@ -197,11 +200,22 @@
             this.lblSource.TabIndex = 10;
             this.lblSource.Text = "Source";
             // 
+            // btnSuggest
+            // 
+            this.btnSuggest.Location = new System.Drawing.Point(337, 315);
+            this.btnSuggest.Name = "btnSuggest";
+            this.btnSuggest.Size = new System.Drawing.Size(75, 23);
+            this.btnSuggest.TabIndex = 3;
+            this.btnSuggest.Text = "Suggest";
+            this.btnSuggest.UseVisualStyleBackColor = true;
+            this.btnSuggest.Click += new System.EventHandler(this.btnSuggest_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 389);
+            this.Controls.Add(this.btnSuggest);
             this.Controls.Add(this.lblSource);
             this.Controls.Add(this.btnArchive);
             this.Controls.Add(this.btnCustom);
@@ -242,5 +256,6 @@
         private System.Windows.Forms.Button btnShowCustom;
         private System.Windows.Forms.Button btnArchive;
         private System.Windows.Forms.Label lblSource;
+        private System.Windows.Forms.Button btnSuggest;
     }
 }

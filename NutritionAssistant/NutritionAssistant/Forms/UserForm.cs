@@ -348,6 +348,7 @@ namespace NutritionAssistant
                 SetLoggedIn(users[i]);
                 calledBy.ChangeUser(users[i]);
             }
+            calledBy.ClearResults();
             this.Close();
         }
 
