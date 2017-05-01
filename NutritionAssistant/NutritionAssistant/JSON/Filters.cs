@@ -15,89 +15,64 @@ namespace NutritionAssistant.JSON
         {
             Random r = new Random();
             from = calories / r.Next(2, 4);
-            to = calories;// / r.Next(1, 2);
+            to = calories;
         }
     }
 
-    public class NfSugars
+    public abstract class NfLte
     {
         public int lte { get; set; }
+    }
 
+    public class NfSugars : NfLte
+    {
         public NfSugars(int sugars)
         {
             lte = sugars;
         }
     }
 
-    public class NfSodium
+    public class NfSodium : NfLte
     {
-        public int lte { get; set; }
-
         public NfSodium(int sodium)
         {
             lte = sodium;
         }
     }
 
-    public class NfTotalFat
+    public class NfTotalFat : NfLte
     {
-        public int lte { get; set; }
-        
         public NfTotalFat(int fat)
         {
             lte = fat;
         }
     }
 
-    public class NfTotalCarbohydrate
+    public class NfTotalCarbohydrate : NfLte
     {
-        public int lte { get; set; }
-
         public NfTotalCarbohydrate(int carbs)
         {
             lte = carbs;
         }
     }
 
-    public class NfCholesterol
+    public class NfCholesterol : NfLte
     {
-        public int lte { get; set; }
-
         public NfCholesterol(int cholesterol)
         {
             lte = cholesterol;
         }
     }
 
-    //public class NfProtein
+    //public class Not
     //{
-    //    public int gte { get; set; }
+    //    public int item_type { get; set; }
+
+    //    public Not()
+    //    {
+    //        item_type = 1;
+    //    }
     //}
-
-    //public class NfVitaminA
-    //{
-    //    public int gte { get; set; }
-    //}
-
-    //public class NfVitaminC
-    //{
-    //    public int gte { get; set; }
-    //}
-
-    //public class NfPotassium
-    //{
-    //    public int gte { get; set; }
-    //}
-
-    public class Not
-    {
-        public int item_type { get; set; }
-
-        public Not()
-        {
-            item_type = 1;
-        }
-    }
 
     public class Filters
     {
