@@ -21,7 +21,7 @@ namespace NutritionAssistant
 
         MainForm calledBy;
 
-        const string filename = "UserData.json";
+        public const string filename = "UserData.json";
         const string newUserName = "New user...";
         bool unsaved = false;
         
@@ -51,38 +51,16 @@ namespace NutritionAssistant
             SetupCboUsers();
         }
 
-        public static string GetFilepath()
-        {
-            return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).Substring(6) + '\\' + filename;
-        }
-
-        public static string GetFilepath(string _filename)
-        {
-            return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).Substring(6) + '\\' + _filename;
-        }
-
         void GetUsers()
         {
-            if (!File.Exists(GetFilepath()))
+            if (!File.Exists(Functions.GetFilepath(filename)))
             {
                 users = new List<User>();
-                WriteJSON();
+                Functions.WriteJSON(users, Functions.GetFilepath(filename));
                 return;
             }
 
-            ReadJSON();
-        }
-
-        static List<User> GetUsers(string filepath)
-        {
-            if (!File.Exists(filepath))
-            {
-                List<User> newUsers = new List<User>();
-                WriteJSON(newUsers, filepath);
-                return newUsers;
-            }
-
-            return ReadUserJSON(filepath);
+            users = Functions.ReadUserJSON(Functions.GetFilepath(filename));
         }
         
         User GetLoggedIn()
@@ -90,39 +68,17 @@ namespace NutritionAssistant
             int index = users.FindIndex(x => x.logged_in == true);
             if (index == -1)
             {
-                //GetUsers(GetFilepath())[0].SetLogin(true)
                 users[0] = users[0].SetLogin(true);
                 currentUser = users[0];
                 return users[0];
             }
             else
                 return users[index];
-
-            //User user = users.Find(x => x.logged_in);
-            //return user == null ? users[0].SetLogin(true) : user;
-        }
-
-        public static User GetLoggedIn(List<User> _users)
-        {
-            int index = _users.FindIndex(x => x.logged_in == true);
-            if (index == -1)
-            {
-                //GetUsers(GetFilepath())[0].SetLogin(true)
-                _users[0] = _users[0].SetLogin(true);
-                //currentUser = users[0];
-                return _users[0];
-            }
-            else
-                return _users[index];
-            //User user = _users.Find(x => x.logged_in);
-            //return user == null ? _users[0].SetLogin(true) : user;
         }
 
         bool SetLoggedIn(User newLogin)
         {
             int i = users.FindIndex(x => x.logged_in);
-            //if (i == users.FindIndex(x => x.id == newLogin.id))
-            //    return false;
             
             if(i != -1)
                 users[i].logged_in = false;
@@ -130,7 +86,7 @@ namespace NutritionAssistant
             newLogin.logged_in = true;
             users[users.FindIndex(x => x.id == newLogin.id)] = newLogin;
 
-            WriteJSON();
+            Functions.WriteJSON(users, Functions.GetFilepath(filename));
             return true;
         }
 
@@ -140,7 +96,6 @@ namespace NutritionAssistant
             cboUsers.DataSource = users;
             cboUsers_DataSourceChanged(cboUsers, new EventArgs());
             cboUsers.DisplayMember = "name";
-            //cboUsers.SelectedIndex = users.IndexOf(currentUser);
             cboUsers.SelectedIndex = users.FindIndex(x => x.logged_in);
         }
 
@@ -154,9 +109,8 @@ namespace NutritionAssistant
         void CreateUser(User newUser)
         {
             users.Add(newUser);
-            WriteJSON();
+            Functions.WriteJSON(users, Functions.GetFilepath(filename));
             SetupCboUsers();
-            //GetUsers();
         }
 
         void DeleteUser(User delUser)
@@ -164,9 +118,8 @@ namespace NutritionAssistant
             users.Remove(users.Find(x => x.id == delUser.id));
             users[0] = users[0].SetLogin(true);
             currentUser = users[0];
-            WriteJSON();
+            Functions.WriteJSON(users, Functions.GetFilepath(filename));
             SetupCboUsers();
-            //GetUsers();
         }
 
         void EditUser(User oldUser, User newUser)
@@ -175,67 +128,8 @@ namespace NutritionAssistant
             users[i] = newUser;
             if (currentUser.id == i)
                 currentUser = newUser;
-            WriteJSON();
+            Functions.WriteJSON(users, Functions.GetFilepath(filename));
             SetupCboUsers();
-            //GetUsers();
-        }
-
-        void WriteJSON() 
-        {
-            users.RemoveAll(x => x.name == newUserName);
-
-            using (StreamWriter file = File.CreateText(GetFilepath()))
-            {
-                JsonSerializer js = new JsonSerializer();
-                js.Serialize(file, users);
-            }
-        }
-
-        public static void WriteJSON(List<User> _users, string filepath)
-        {
-            _users.RemoveAll(x => x.name == newUserName);
-
-            using (StreamWriter file = File.CreateText(filepath))
-            {
-                JsonSerializer js = new JsonSerializer();
-                js.Serialize(file, _users);
-            }
-        }
-
-        public static void WriteJSON(List<Food> _foods, string filepath)
-        {
-            using (StreamWriter file = File.CreateText(filepath))
-            {
-                JsonSerializer js = new JsonSerializer();
-                js.Serialize(file, _foods);
-            }
-        }
-
-        void ReadJSON()
-        {
-            using (StreamReader file = File.OpenText(GetFilepath()))
-            {
-                JsonSerializer js = new JsonSerializer();
-                users = (List<User>)js.Deserialize(file, typeof(List<User>));
-            }
-        }
-
-        public static List<User> ReadUserJSON(string filepath)
-        {
-            using (StreamReader file = File.OpenText(filepath))
-            {
-                JsonSerializer js = new JsonSerializer();
-                return (List<User>)js.Deserialize(file, typeof(List<User>));
-            }
-        }
-
-        public static List<Food> ReadFoodJSON(string filepath)
-        {
-            using (StreamReader file = File.OpenText(filepath))
-            {
-                JsonSerializer js = new JsonSerializer();
-                return (List<Food>)js.Deserialize(file, typeof(List<Food>));
-            }
         }
 
         int MaxID()
@@ -311,7 +205,6 @@ namespace NutritionAssistant
                     double.Parse(txtHeight.Text), int.Parse(txtAge.Text), cboSex.SelectedItem.ToString(),
                     cboActivity.SelectedItem.ToString(), rdoCalManual.Checked, (WeightChange)cboWeightChange.SelectedIndex));
 
-            //cboUsers.DataSource = users;
             SetupCboUsers();
             cboUsers.SelectedIndex = i;
 
@@ -330,7 +223,6 @@ namespace NutritionAssistant
                         if (!DataValidation())
                             return;
                         SaveChanges();
-                        //User user = users.Find(x => x.id == ((User)cboUsers.SelectedItem).id);
                         int i = users.FindIndex(x => x.id == ((User)cboUsers.SelectedItem).id);
                         SetLoggedIn(users[i]);
                         calledBy.ChangeUser(users[i]);
@@ -343,7 +235,6 @@ namespace NutritionAssistant
             }
             else
             {
-                //User user = users.Find(x => x.id == ((User)cboUsers.SelectedItem).id);
                 int i = users.FindIndex(x => x.id == ((User)cboUsers.SelectedItem).id);
                 SetLoggedIn(users[i]);
                 calledBy.ChangeUser(users[i]);
@@ -510,10 +401,6 @@ namespace NutritionAssistant
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            //calledBy.ResetUser(currentUser);
-            //users[users.FindIndex(x => x.id == currentUser.id)].food_eaten.Clear();
-            //currentUser.food_eaten.Clear();
-            //MessageBox.Show(currentUser.name + "'s daily food successfully reset.", "Reset", MessageBoxButtons.OK);
             DialogResult result = MessageBox.Show("This user will be permanently deleted. Continue?", "Delete User", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {

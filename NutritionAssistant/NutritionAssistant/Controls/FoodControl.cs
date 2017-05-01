@@ -71,7 +71,7 @@ namespace NutritionAssistant.Controls
         public void MenuEdit_Click(object sender, EventArgs e)
         {
             ShowCustomForm();
-            string fp = UserForm.GetFilepath(CustomForm.foodFile);
+            string fp = Functions.GetFilepath(CustomForm.foodFile);
             parent.PopulateResults(CustomForm.GetCustomFood(fp), edit, rightClick);
         }
 
@@ -80,7 +80,7 @@ namespace NutritionAssistant.Controls
 
             if (parent.flpCurrent == MainForm.flpItems.Custom)
             {
-                string fp = UserForm.GetFilepath(CustomForm.foodFile);
+                string fp = Functions.GetFilepath(CustomForm.foodFile);
                 CustomForm.RemoveCustomFood(fp, food);
                 parent.PopulateResults(CustomForm.GetCustomFood(fp), edit, rightClick);
             }
@@ -97,7 +97,7 @@ namespace NutritionAssistant.Controls
                     user.eaten_cal = user.EatenCal();
 
                     users[i] = user;
-                    UserForm.WriteJSON(users, UserForm.GetFilepath());
+                    Functions.WriteJSON(users, Functions.GetFilepath(UserForm.filename));
 
                     parent.currentUser = user;
                     parent.SetCalories();

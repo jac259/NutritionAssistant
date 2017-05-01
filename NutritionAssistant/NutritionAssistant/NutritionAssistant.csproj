@@ -99,6 +99,7 @@
     <Compile Include="JSON\Fields.cs" />
     <Compile Include="JSON\Filters.cs" />
     <Compile Include="JSON\Hit.cs" />
+    <Compile Include="JSON\Functions.cs" />
     <Compile Include="JSON\Results.cs" />
     <Compile Include="JSON\User.cs" />
     <Compile Include="JSON\Food.cs" />
