@@ -53,7 +53,7 @@ namespace NutritionAssistant
         public void GetCurrentUser()
         {
             List<User> users = GetAllUsers();
-            User user = Functions.GetLoggedIn(users);
+            User user = JsonFunctions.GetLoggedIn(users);
             SetCurrentUser(user);
         }
 
@@ -103,7 +103,7 @@ namespace NutritionAssistant
 
         public List<User> GetAllUsers()
         {
-            return Functions.ReadUserJSON(Functions.GetFilepath(UserForm.filename));
+            return JsonFunctions.ReadUserJSON(JsonFunctions.GetFilepath(UserForm.filename));
         }
 
         public void ArchiveUsers()
@@ -128,7 +128,7 @@ namespace NutritionAssistant
                     currentUser = users[i];
             }
 
-            Functions.WriteJSON(users, Functions.GetFilepath(UserForm.filename));
+            JsonFunctions.WriteJSON(users, JsonFunctions.GetFilepath(UserForm.filename));
             SetCalories();
         }
 
@@ -148,7 +148,7 @@ namespace NutritionAssistant
             if (i != -1)
                 users[i] = user;
 
-            Functions.WriteJSON(users, Functions.GetFilepath(UserForm.filename));
+            JsonFunctions.WriteJSON(users, JsonFunctions.GetFilepath(UserForm.filename));
 
             SetCalories();
         }
@@ -257,7 +257,7 @@ namespace NutritionAssistant
 
         private void btnShowCustom_Click(object sender, EventArgs e)
         {
-            List<Food> customFood = CustomForm.GetCustomFood(Functions.GetFilepath(CustomForm.foodFile));
+            List<Food> customFood = CustomForm.GetCustomFood(JsonFunctions.GetFilepath(CustomForm.foodFile));
             PopulateResults(customFood, false, true);
 
             flpCurrent = flpItems.Custom;

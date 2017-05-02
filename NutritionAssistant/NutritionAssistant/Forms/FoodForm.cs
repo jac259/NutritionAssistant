@@ -100,7 +100,7 @@ namespace NutritionAssistant.Forms
 
         public static List<User> GetAllUsers()
         {
-            return Functions.ReadUserJSON(Functions.GetFilepath(UserForm.filename));
+            return JsonFunctions.ReadUserJSON(JsonFunctions.GetFilepath(UserForm.filename));
         }
 
         private void UpdateUser()
@@ -146,7 +146,7 @@ namespace NutritionAssistant.Forms
             user.eaten_cal = user.EatenCal();
 
             users[i] = user;
-            Functions.WriteJSON(users, Functions.GetFilepath(UserForm.filename));
+            JsonFunctions.WriteJSON(users, JsonFunctions.GetFilepath(UserForm.filename));
 
             calledBy.currentUser = user;
             calledBy.SetCalories();

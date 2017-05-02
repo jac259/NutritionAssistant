@@ -53,14 +53,14 @@ namespace NutritionAssistant
 
         void GetUsers()
         {
-            if (!File.Exists(Functions.GetFilepath(filename)))
+            if (!File.Exists(JsonFunctions.GetFilepath(filename)))
             {
                 users = new List<User>();
-                Functions.WriteJSON(users, Functions.GetFilepath(filename));
+                JsonFunctions.WriteJSON(users, JsonFunctions.GetFilepath(filename));
                 return;
             }
 
-            users = Functions.ReadUserJSON(Functions.GetFilepath(filename));
+            users = JsonFunctions.ReadUserJSON(JsonFunctions.GetFilepath(filename));
         }
         
         User GetLoggedIn()
@@ -86,7 +86,7 @@ namespace NutritionAssistant
             newLogin.logged_in = true;
             users[users.FindIndex(x => x.id == newLogin.id)] = newLogin;
 
-            Functions.WriteJSON(users, Functions.GetFilepath(filename));
+            JsonFunctions.WriteJSON(users, JsonFunctions.GetFilepath(filename));
             return true;
         }
 
@@ -109,7 +109,7 @@ namespace NutritionAssistant
         void CreateUser(User newUser)
         {
             users.Add(newUser);
-            Functions.WriteJSON(users, Functions.GetFilepath(filename));
+            JsonFunctions.WriteJSON(users, JsonFunctions.GetFilepath(filename));
             SetupCboUsers();
         }
 
@@ -118,7 +118,7 @@ namespace NutritionAssistant
             users.Remove(users.Find(x => x.id == delUser.id));
             users[0] = users[0].SetLogin(true);
             currentUser = users[0];
-            Functions.WriteJSON(users, Functions.GetFilepath(filename));
+            JsonFunctions.WriteJSON(users, JsonFunctions.GetFilepath(filename));
             SetupCboUsers();
         }
 
@@ -128,7 +128,7 @@ namespace NutritionAssistant
             users[i] = newUser;
             if (currentUser.id == i)
                 currentUser = newUser;
-            Functions.WriteJSON(users, Functions.GetFilepath(filename));
+            JsonFunctions.WriteJSON(users, JsonFunctions.GetFilepath(filename));
             SetupCboUsers();
         }
 

@@ -250,7 +250,7 @@ namespace NutritionAssistant.Forms
             customFood.nf_potassium = (from t in optionals where t.Name == "txtPotassium" select t).First().Text;
 
             // Set ID
-            string fp = Functions.GetFilepath(foodFile);
+            string fp = JsonFunctions.GetFilepath(foodFile);
             List<Food> customFoods = GetCustomFood(fp);
             if (edit)
             {
@@ -272,13 +272,13 @@ namespace NutritionAssistant.Forms
                 customFoods.Add(customFood);
             }
 
-            Functions.WriteJSON(customFoods, fp);
+            JsonFunctions.WriteJSON(customFoods, fp);
             return customFood;
         }
 
         private List<User> GetAllUsers()
         {
-            return Functions.ReadUserJSON(Functions.GetFilepath(UserForm.filename));
+            return JsonFunctions.ReadUserJSON(JsonFunctions.GetFilepath(UserForm.filename));
         }
 
         public static List<Food> GetCustomFood(string filepath)
@@ -286,11 +286,11 @@ namespace NutritionAssistant.Forms
             if (!File.Exists(filepath))
             {
                 List<Food> newFoods = new List<Food>();
-                Functions.WriteJSON(newFoods, filepath);
+                JsonFunctions.WriteJSON(newFoods, filepath);
                 return newFoods;
             }
 
-            return Functions.ReadFoodJSON(filepath);
+            return JsonFunctions.ReadFoodJSON(filepath);
         }
 
         public static void RemoveCustomFood(string filepath, Food food)
@@ -300,7 +300,7 @@ namespace NutritionAssistant.Forms
 
             List<Food> customFoods = GetCustomFood(filepath);
             customFoods.Remove(customFoods.Find(x => x.item_id == food.item_id));
-            Functions.WriteJSON(customFoods, filepath);
+            JsonFunctions.WriteJSON(customFoods, filepath);
         }
 
         double ParseDbl(string s)
@@ -348,7 +348,7 @@ namespace NutritionAssistant.Forms
             user.eaten_cal = user.EatenCal();
 
             users[i] = user;
-            Functions.WriteJSON(users, Functions.GetFilepath(UserForm.filename));
+            JsonFunctions.WriteJSON(users, JsonFunctions.GetFilepath(UserForm.filename));
 
             calledBy.currentUser = user;
             calledBy.SetCalories();
