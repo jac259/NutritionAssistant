@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NutritionAssistant.JSON
 {
-    public class Functions
+    public abstract class Functions
     {
         const string newUserName = "New user...";
 

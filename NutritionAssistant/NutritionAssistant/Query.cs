@@ -11,7 +11,7 @@ using System.Reflection;
 
 namespace NutritionAssistant
 {
-    class Query
+    public abstract class Query
     {
         public static string app_Id = "2e481270";
         public static string app_Key = "5f7f23a4d1e548f572bf781adb590000";
